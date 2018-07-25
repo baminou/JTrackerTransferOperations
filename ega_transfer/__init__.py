@@ -24,6 +24,7 @@ def get_jtracker_fids(jtracker_instance,state=None):
     logging.info("JTracker EGAFIDs retrieved successfully "+jtracker_instance.__class__.__name__)
     return fids
 
+
 def get_audit_fids(tsv_file):
     """
     Retrieve all EGAFIDs contained in an audit tsv file

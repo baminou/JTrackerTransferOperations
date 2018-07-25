@@ -6,6 +6,7 @@ from operations.ega_job import EGAJob
 from operations.ega_to_stage import EGAStage
 from operations.minibam_sync_files import MinibamSyncFiles
 from operations.ega_to_delete import EgaToDelete
+from operations.ega_dbox import EGADbox
 import logging
 import json
 
@@ -24,6 +25,10 @@ def run_minibam_sync(args):
 
 def run_ega_to_delete(args):
     EgaToDelete().run(args)
+    return
+
+def run_ega_dbox(args):
+    EGADbox().run(args)
     return
 
 def run_ega_job_schema(args):
@@ -51,6 +56,11 @@ def main():
 
     parser_ega_job_schema = subparsers.add_parser('ega:job:schema')
     parser_ega_job_schema.set_defaults(function=run_ega_job_schema)
+
+    parser_ega_dbox = subparsers.add_parser('ega:dbox')
+    parser_ega_dbox.add_argument('-s','--aspera-server', dest='aspera_server',required=True)
+    parser_ega_dbox.add_argument('-u','--aspera-user', dest='aspera_user', required=True)
+    parser_ega_dbox.set_defaults(function=run_ega_dbox)
 
     parser_ega_stage = subparsers.add_parser('ega:stage')
     parser_ega_stage.add_argument('-c', '--config', dest='config', required=True)
