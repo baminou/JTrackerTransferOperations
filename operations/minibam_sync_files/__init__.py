@@ -37,6 +37,7 @@ class MinibamSyncFiles(Operation):
             for state in self._config.get('git_dirs'):
                 for file in os.listdir(self._config.get('git_dirs')[state]):
                     if job in file:
+                        found = True
                         if state == jobname_state[job]:
                             break
                         else:
