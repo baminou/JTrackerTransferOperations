@@ -1,8 +1,6 @@
 
 import logging
 import yaml
-from jsonschema import validate
-from jsonschema.exceptions import ValidationError
 from abc import ABC, abstractmethod
 from jsonschema import Draft4Validator
 
