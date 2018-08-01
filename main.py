@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-from operations.ega_job import EGAJob
-from operations.ega_to_stage import EGAStage
-from operations.minibam_sync_files import MinibamSyncFiles
-from operations.ega_to_delete import EgaToDelete
-from operations.ega_dbox import EGADbox
+from operations.ega.job import Job as EGAJob
+from operations.ega.to_stage import ToStage
+from operations.minibam.sync_files import SyncFiles
+from operations.ega.to_delete import ToDelete
+from operations.ega.dbox import Dbox
+from operations.base.make_operation import MakeOperation
+from operations.base.make_library import Makelibrary
 import logging
 import json
 
@@ -16,19 +18,27 @@ def run_ega_job(args):
     return
 
 def run_ega_to_stage(args):
-    EGAStage().run(args)
+    ToStage().run(args)
     return
 
 def run_minibam_sync(args):
-    MinibamSyncFiles().run(args)
+    SyncFiles().run(args)
     return
 
 def run_ega_to_delete(args):
-    EgaToDelete().run(args)
+    ToDelete().run(args)
     return
 
 def run_ega_dbox(args):
-    EGADbox().run(args)
+    Dbox().run(args)
+    return
+
+def run_make_operation(args):
+    MakeOperation().run(args)
+    return
+
+def run_make_library(args):
+    Makelibrary().run(args)
     return
 
 def run_ega_job_schema(args):
@@ -36,12 +46,14 @@ def run_ega_job_schema(args):
     return
 
 def run_ega_delete_schema(args):
-    print(json.dumps(EgaToDelete()._schema(),indent=4))
+    print(json.dumps(ToDelete()._schema(),indent=4))
     return
 
 def run_ega_stage_schema(args):
-    print(json.dumps(EGAStage()._schema(),indent=4))
+    print(json.dumps(ToStage()._schema(),indent=4))
     return
+
+
 
 def main():
     logging.basicConfig(level=logging.INFO)
@@ -78,6 +90,15 @@ def main():
 
     parser_ega_delete_schema = subparsers.add_parser('ega:delete:schema')
     parser_ega_delete_schema.set_defaults(function=run_ega_delete_schema)
+
+    parser_make_operation = subparsers.add_parser('make:operation')
+    parser_make_operation.add_argument('-o','--operation', dest='operation', required=True, help="Name of the operation in snake string")
+    parser_make_operation.add_argument('-l','--library', dest='library', required=True, help="Name of the operations library")
+    parser_make_operation.set_defaults(function=run_make_operation)
+
+    parser_make_library = subparsers.add_parser('make:library')
+    parser_make_library.add_argument('-n', '--name', dest='name', required=True, help="Name of the library")
+    parser_make_library.set_defaults(function=run_make_library)
 
     parser_minibam_sync = subparsers.add_parser('minibam:sync')
     parser_minibam_sync.add_argument('-c',

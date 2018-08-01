@@ -3,7 +3,7 @@ import logging
 import ega_transfer
 from entities.ega import EGA
 
-class EgaToDelete(Operation):
+class ToDelete(Operation):
     def _schema(self):
         return {
             "jtracker_host": {"type": "string"},

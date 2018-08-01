@@ -7,7 +7,7 @@ import ega_transfer
 import csv
 from operations.operation import Operation
 
-class EGAStage(Operation):
+class ToStage(Operation):
     def _schema(self):
         return {
             "etcd_jtracker": {

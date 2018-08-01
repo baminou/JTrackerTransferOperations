@@ -7,7 +7,7 @@ import ega_transfer
 import os
 from operations.operation import Operation
 
-class EGAJob(Operation):
+class Job(Operation):
     def _schema(self):
         return {
             "etcd_jtracker": {

@@ -8,7 +8,7 @@ import os
 from operations.operation import Operation
 from entities.ega import EGA
 
-class EGADbox(Operation):
+class Dbox(Operation):
     def _run(self,args):
         ega = EGA(args.aspera_server, args.aspera_user)
         for file in ega.dbox():

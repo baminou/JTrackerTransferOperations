@@ -5,7 +5,7 @@ import os
 import minibam_transfer
 import shutil
 
-class MinibamSyncFiles(Operation):
+class SyncFiles(Operation):
     def _schema(self):
         return {
             "jtracker_host": {"type": "string"},
