@@ -9,6 +9,7 @@ from operations.ega.to_delete import ToDelete
 from operations.ega.dbox import Dbox
 from operations.base.make_operation import MakeOperation
 from operations.base.make_library import Makelibrary
+from operations.song.validate_payload import Validatepayload
 import logging
 import json
 
@@ -40,6 +41,9 @@ def run_make_operation(args):
 def run_make_library(args):
     Makelibrary().run(args)
     return
+
+def run_validate_payload(args):
+    Validatepayload().run(args)
 
 def run_ega_job_schema(args):
     print(json.dumps(EGAJob()._schema(),indent=4))
@@ -99,6 +103,10 @@ def main():
     parser_make_library = subparsers.add_parser('make:library')
     parser_make_library.add_argument('-n', '--name', dest='name', required=True, help="Name of the library")
     parser_make_library.set_defaults(function=run_make_library)
+
+    parser_validate_payload = subparsers.add_parser('song:validate')
+    parser_validate_payload.add_argument('-p', '--payload',dest='payload', required=True, type=argparse.FileType('r'), help="Song payload json file")
+    parser_validate_payload.set_defaults(function=run_validate_payload)
 
     parser_minibam_sync = subparsers.add_parser('minibam:sync')
     parser_minibam_sync.add_argument('-c',

@@ -3,7 +3,7 @@
 from operations.operation import Operation
 import shutil
 import os
-from ..utils import library_create, library_exists, library_path
+from ..utils import library_create, library_path
 
 class MakeOperation(Operation):
     def _run(self, args):
