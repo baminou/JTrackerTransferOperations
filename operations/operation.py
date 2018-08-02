@@ -3,14 +3,18 @@ import logging
 import yaml
 from abc import ABC, abstractmethod
 from jsonschema import Draft4Validator
+from .documentable import Documentable
+import os
+from .library import Library
 
-class Operation:
+class Operation(Documentable):
     """This abstract class is the mother class for operations. An operation is a specific action on a JTracker workflow.
     Two methods have to be implemented for childen classes.
     _schema and _run"""
 
     def __init__(self,config={}):
         self._config = config
+        return
 
     @abstractmethod
     def _schema(self):
@@ -25,8 +29,9 @@ class Operation:
         """
         raise NotImplementedError
 
+    @staticmethod
     @abstractmethod
-    def _run(self, args):
+    def _run(args):
         """
         The logic of the operation. The config dictionary can be retrieved in the config dictionary: self._config
         
@@ -70,7 +75,8 @@ class Operation:
         logging.debug("Config file loaded")
         return response
 
-    def run(self, args):
+    @classmethod
+    def run(cls, args):
         """
         Main method to run. This method contains the loading+validation of the config file and the _run method
         :param args: 
@@ -78,8 +84,21 @@ class Operation:
         """
         # Load the config file containing the needed information
         # If the config file has something missing, a validation error might raise, depending on the error
-        if hasattr(args,'config'):
-            logging.info("Configuration yaml file")
-            self._config = self.load_config(args.config)
-            self._validate_json_config(self._config)
-        self._run(args)
+        #if hasattr(args,'config'):
+        #    logging.info("Configuration yaml file")
+        #    self._config = self.load_config(args.config)
+        #    self._validate_json_config(self._config)
+        #operation = cls.__name__()
+        cls()._run(args)
+        return
+
+    @staticmethod
+    def parser(main_parser):
+        return main_parser
+
+    @staticmethod
+    def environ_or_required(key):
+        if os.environ.get(key):
+            return {'default': os.environ.get(key)}
+        else:
+            return {'required': True}

@@ -4,8 +4,23 @@ import logging
 import os
 import minibam_transfer
 import shutil
+import argparse
 
 class SyncFiles(Operation):
+
+    @staticmethod
+    def name():
+        return "sync"
+
+    @staticmethod
+    def description():
+        return "Synchronize mini-bam file transfer on JTracker with Github Repo"
+
+    @staticmethod
+    def parser(main_parser):
+        main_parser.add_argument('-p', '--payload', dest='payload', required=True,
+                                             type=argparse.FileType('r'), help="Song payload json file")
+
     def _schema(self):
         return {
             "jtracker_host": {"type": "string"},

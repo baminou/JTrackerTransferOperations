@@ -1,9 +1,20 @@
 
 from operations.operation import Operation
 
-class NewOperation(Operation):
-    def _schema(self):
-        return {}
+class NEWOPERATION(Operation):
 
-    def _run(self,args):
+    @staticmethod
+    def name():
+        return "NEWOPERATION"
+
+    @staticmethod
+    def description():
+        return "NEWOPERATION has not been documented yet."
+
+    @staticmethod
+    def parser(main_parser):
         return
+
+    @staticmethod
+    def _run(args):
+        raise NotImplementedError("NEWOPERATION not implemented yet.")

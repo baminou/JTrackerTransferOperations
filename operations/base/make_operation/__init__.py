@@ -6,7 +6,22 @@ import os
 from ..utils import library_create, library_path
 
 class MakeOperation(Operation):
-    def _run(self, args):
+
+    @staticmethod
+    def name():
+        return "make_operation"
+
+    @staticmethod
+    def description():
+        return "Create a new operation"
+
+    @staticmethod
+    def parser(main_parser):
+        main_parser.add_argument('library', help="Name of the library to add the operation")
+        main_parser.add_argument('operation', help="Name of the operation")
+
+    @staticmethod
+    def _run(args):
 
         #Retrieve the library name and path
         library = args.library
@@ -25,7 +40,7 @@ class MakeOperation(Operation):
 
         shutil.copytree(template_path,operation_path)
         with open(new_init_path,'r') as f:
-            new_text = f.read().replace('NewOperation', MakeOperation.to_camel_case(operation).capitalize())
+            new_text = f.read().replace('NEWOPERATION', MakeOperation.to_camel_case(operation).capitalize())
 
         with open(new_init_path,'w') as f:
             f.write(new_text)

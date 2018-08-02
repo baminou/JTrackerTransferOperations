@@ -6,8 +6,24 @@ import json
 import ega_transfer
 import os
 from operations.operation import Operation
+import argparse
 
 class Job(Operation):
+
+    @staticmethod
+    def name():
+        return "job"
+
+    @staticmethod
+    def description():
+        return "Generate the job json files needed to run JTracker workflow"
+
+    @staticmethod
+    def parser(main_parser):
+        main_parser.add_argument('-c', '--config', dest='config', required=True, help="A valid configuration yaml file", type=argparse.FileType('r'))
+        main_parser.add_argument('-a', '--audit', dest='audit', required=True)
+        main_parser.add_argument('-o', '--output', dest='output_dir', required=True)
+
     def _schema(self):
         return {
             "etcd_jtracker": {
