@@ -5,6 +5,7 @@ from .job import Job
 from .dbox import Dbox
 from .to_stage import ToStage
 from .to_delete import ToDelete
+from .runnable import Runnable
 
 class EGA(Library):
 
@@ -26,5 +27,6 @@ class EGA(Library):
             'job': Job,
             'dbox': Dbox,
             'to_stage': ToStage,
-            'to_delete': ToDelete
+            'to_delete': ToDelete,
+            'runnable': Runnable
         }
