@@ -15,13 +15,10 @@ class Makelibrary(Operation):
     def description():
         return "Create a new library"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('name')
         return
 
-    @staticmethod
-    def _run(args):
-        print(args.name)
+    def _run(self, args):
         library_create(args.name)
         return

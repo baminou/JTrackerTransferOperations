@@ -69,13 +69,14 @@ class EGAAudit:
         rows = self.find_rows(egaf_id)
 
         job['bundle_id'] = self._get_bundle_id(rows[0]['EGA Analysis Accession'],rows[0]['EGA Run Accession'])
+        job['name'] = job['bundle_id']
         job['bundle_type'] = self._get_bundle_type(rows[0]['EGA Analysis Accession'],rows[0]['EGA Run Accession'])
         job['donor_gender'] = rows[0]["Donor Gender"]
         job['ega_analysis_id'] = rows[0]['EGA Analysis Accession']
         job['ega_dataset_id'] = rows[0]["EGA Dataset Accession"]
         job['ega_experiment_id'] = rows[0]["EGA Experiment Accession"]
         job['ega_metadata_file_name'] = 'bundle.'+job['bundle_id']+'.xml'
-        job['ega_metada_repo'] = metadata_repo
+        job['ega_metadata_repo'] = metadata_repo
         job['ega_run_id'] = rows[0]["EGA Run Accession"]
         job['ega_sample_id'] = rows[0]["EGA Sample Accession"]
         job['ega_study_id'] = rows[0]["EGA Study Accession"]

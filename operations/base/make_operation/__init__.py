@@ -19,9 +19,9 @@ class MakeOperation(Operation):
     def parser(main_parser):
         main_parser.add_argument('library', help="Name of the library to add the operation")
         main_parser.add_argument('operation', help="Name of the operation")
+        return
 
-    @staticmethod
-    def _run(args):
+    def _run(self, args):
 
         #Retrieve the library name and path
         library = args.library

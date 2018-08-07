@@ -1,19 +1,22 @@
 
 from operations.operation import Operation
+import time
 
-class NEWOPERATION(Operation):
+class Test(Operation):
 
     @staticmethod
     def name():
-        return "NEWOPERATION"
+        return "Test"
 
     @staticmethod
     def description():
-        return "NEWOPERATION has not been documented yet."
+        return "Test has not been documented yet."
 
     @staticmethod
     def parser(main_parser):
         return
 
     def _run(self, args):
-        raise NotImplementedError("NEWOPERATION not implemented yet.")
+        print("start")
+        time.sleep(2)
+        print("end")

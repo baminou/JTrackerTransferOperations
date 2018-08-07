@@ -5,16 +5,31 @@ from abc import ABC, abstractmethod
 from jsonschema import Draft4Validator
 from .documentable import Documentable
 import os
-from .library import Library
+import multiprocessing
+import threading
+import time
 
 class Operation(Documentable):
     """This abstract class is the mother class for operations. An operation is a specific action on a JTracker workflow.
     Two methods have to be implemented for childen classes.
     _schema and _run"""
 
-    def __init__(self,config={}):
-        self._config = config
+    def __init__(self, on_running_timer=0.5):
+        self._operation_state = multiprocessing.Manager().dict({'state': 'running'})
+        self._on_running_timer = on_running_timer
         return
+
+    @property
+    def operation_state(self):
+        return self._operation_state
+
+    def set_state(self, state):
+        self._operation_state['state'] = state
+        return
+
+    @property
+    def on_running_timer(self):
+        return self._on_running_timer
 
     @abstractmethod
     def _schema(self):
@@ -29,9 +44,8 @@ class Operation(Documentable):
         """
         raise NotImplementedError
 
-    @staticmethod
     @abstractmethod
-    def _run(args):
+    def _run(self, args):
         """
         The logic of the operation. The config dictionary can be retrieved in the config dictionary: self._config
         
@@ -88,12 +102,40 @@ class Operation(Documentable):
         #    logging.info("Configuration yaml file")
         #    self._config = self.load_config(args.config)
         #    self._validate_json_config(self._config)
-        #operation = cls.__name__()
-        cls()._run(args)
+        operation = cls()
+        #operation._run(args)
+        #return
+
+        obj = cls()
+
+        obj.before_start()
+
+        p1 = multiprocessing.Process(name="main",target=obj._run_wrapper, args=(args, obj.operation_state, ))
+        p2 = multiprocessing.Process(name="timer",target=obj.on_running, args=(obj.operation_state, ))
+        p1.start()
+        p2.start()
+        p1.join()
+        p2.join()
+
+        obj.on_completed()
+
         return
 
-    @staticmethod
-    def parser(main_parser):
+    def _run_wrapper(self, args, operation_state):
+        self._run(args=args)
+        self.set_state('on_completion')
+        return
+
+    @classmethod
+    def parser(cls, main_parser):
+        obj = cls()
+        for parent in obj.__class__.__bases__:
+            if issubclass(parent, Operation):
+                parent.parser(main_parser)
+        obj._parser(main_parser)
+        return
+
+    def _parser(self, main_parser):
         return main_parser
 
     @staticmethod
@@ -102,3 +144,28 @@ class Operation(Documentable):
             return {'default': os.environ.get(key)}
         else:
             return {'required': True}
+
+    def before_start(self):
+        self._before_start()
+        self.operation_state['state'] = 'running'
+        return
+
+    def _before_start(self):
+        return
+
+    def on_completed(self):
+        self._on_completed()
+        self.operation_state['state'] = 'completed'
+        return
+
+    def _on_completed(self):
+        return
+
+    def on_running(self, d):
+        if self.operation_state['state'] == 'running':
+            self._on_running()
+            threading.Timer(self.on_running_timer, self.on_running,args=[d]).start()
+            self.operation_state['state'] = 'running'
+
+    def _on_running(self):
+        return

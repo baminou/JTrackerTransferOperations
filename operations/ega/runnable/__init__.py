@@ -20,8 +20,7 @@ class Runnable(Operation):
         main_parser.add_argument('aspera_host', help="EGA Aspera host")
         main_parser.add_argument('aspera_user', help="EGA Aspera user")
 
-    @staticmethod
-    def _run(args):
+    def _run(self, args):
         job_dir = args.job_directory
         aspera_host = args.aspera_host
         aspera_user = args.aspera_user

@@ -4,6 +4,7 @@ from ..library import Library
 from .make_library import Makelibrary
 from .make_operation import MakeOperation
 from .list_operation import Listoperation
+from .test import Test
 
 class Base(Library):
 
@@ -20,5 +21,6 @@ class Base(Library):
         return {
             'make:library': Makelibrary,
             'make:operation': MakeOperation,
-            'list:operations': Listoperation
+            'list:operations': Listoperation,
+            'test': Test
         }

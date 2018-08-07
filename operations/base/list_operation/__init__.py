@@ -20,8 +20,7 @@ class Listoperation(Operation):
     def parser(main_parser):
         return
 
-    @staticmethod
-    def _run(args):
+    def _run(self, args):
         headers = ['Library', 'Operation', 'Command', 'Description']
         data = []
         for library_class in Library.__subclasses__():

@@ -10,6 +10,9 @@ import argparse
 
 class Job(Operation):
 
+    def __init__(self):
+        self._config = None
+
     @staticmethod
     def name():
         return "job"
@@ -73,9 +76,9 @@ class Job(Operation):
 
 
     def _run(self,args):
-        logging.info("Generate jobs for EGA Starts")
+        self._config = self.load_config(args.config)
+        self._validate_json_config(self._config)
 
-        logging.info("Load EGAFIDs")
         # Load all EGAFIDs from EGA aspera server
         ega_box_fids = ega_transfer.get_ega_box_fids(self._config.get('aspera_info').get('server'),self._config.get('aspera_info').get('user'))
 
@@ -88,6 +91,6 @@ class Job(Operation):
         for id in audit_fids:
             if id in ega_box_fids and id not in jtracker_fids:
                 job_name, job_data = EGAAudit(args.audit).get_job(id,self._config.get('metadata_repo'))
-                logging.info(job_name)
-                with open(os.path.join(args.output_dir,job_name+".json"), 'w') as fp:
+                file_name = os.path.join(args.output_dir,job_name+".json")
+                with open(file_name, 'w') as fp:
                     json.dump(job_data,fp,indent=4,sort_keys=True)

@@ -6,6 +6,7 @@ from .dbox import Dbox
 from .to_stage import ToStage
 from .to_delete import ToDelete
 from .runnable import Runnable
+from .is_alive import Isalive
 
 class EGA(Library):
 
@@ -28,5 +29,6 @@ class EGA(Library):
             'dbox': Dbox,
             'to_stage': ToStage,
             'to_delete': ToDelete,
-            'runnable': Runnable
+            'runnable': Runnable,
+            'is_alive': Isalive
         }

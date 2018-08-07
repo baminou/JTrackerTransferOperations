@@ -25,8 +25,7 @@ class Unpublishanalysis(Operation):
 
         return
 
-    @staticmethod
-    def _run(args):
+    def _run(self, args):
         server = args.server
         study = args.study_id
         analysis = args.analysis_id

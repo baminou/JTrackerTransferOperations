@@ -21,7 +21,7 @@ class GithubJTracker(JTracker):
         for repo in self._repositories:
             logging.debug("Loading jobs from %s" % (repo))
             if not self.validate_folder(repo):
-                raise Exception("The repo is not a valid jtracker repository:" + repo)
+                raise Exception("The repo is not a valid jtracker repository: " + repo)
 
             for state in STATES:
                 logging.debug("Loading jobs from %s : state %s" % (repo,state))
@@ -32,7 +32,7 @@ class GithubJTracker(JTracker):
 
     def validate_folder(self, repo):
         content = os.listdir(repo)
-        return 'job_state.completed' in content and 'workflow.config' in content
+        return 'job_state.completed' in content
 
     def _get_state(self, job_name):
         for state in STATES:
