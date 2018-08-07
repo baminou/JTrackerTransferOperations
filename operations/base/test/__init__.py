@@ -1,8 +1,8 @@
 
-from operations.operation import Operation
+from operations.yml_config_operation import YmlConfigOperation
 import time
 
-class Test(Operation):
+class Test(YmlConfigOperation):
 
     @staticmethod
     def name():
@@ -12,11 +12,12 @@ class Test(Operation):
     def description():
         return "Test has not been documented yet."
 
-    @staticmethod
-    def parser(main_parser):
+    def _config_schema(self):
+        return {}
+
+    def _parser(self, main_parser):
         return
 
-    def _run(self, args):
-        print("start")
-        time.sleep(2)
-        print("end")
+    def _run(self):
+        print(self.args.config.readlines())
+        return 1

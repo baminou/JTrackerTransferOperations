@@ -1,7 +1,7 @@
 
 import logging
 import yaml
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from jsonschema import Draft4Validator
 from .documentable import Documentable
 import os
@@ -15,17 +15,33 @@ class Operation(Documentable):
     _schema and _run"""
 
     def __init__(self, on_running_timer=0.5):
-        self._operation_state = multiprocessing.Manager().dict({'state': 'running'})
+        self.__operation_state = multiprocessing.Manager().dict({'state': 'running'})
         self._on_running_timer = on_running_timer
+        self.args = None
+        self.output = None
         return
 
     @property
     def operation_state(self):
-        return self._operation_state
+        return self.__operation_state
 
     def set_state(self, state):
-        self._operation_state['state'] = state
+        self.__operation_state['state'] = state
         return
+
+    def set_args(self, args):
+        self.args = args
+        return
+
+    def get_args(self):
+        return self.args
+
+    def set_output(self, output):
+        self.output = output
+        return
+
+    def get_output(self):
+        return self.output
 
     @property
     def on_running_timer(self):
@@ -45,49 +61,14 @@ class Operation(Documentable):
         raise NotImplementedError
 
     @abstractmethod
-    def _run(self, args):
+    def _run(self):
         """
         The logic of the operation. The config dictionary can be retrieved in the config dictionary: self._config
-        
-        Args:
-            args: The command line arguments needed to run the operation
         
         Raises:
             NotImplementedError: The method has not been implemented yet
         """
         raise NotImplementedError
-
-    def _validate_json_config(self,json):
-        """
-        Validate a dictionary against the _schema method.
-        
-        Args:
-            json: A valid dictionary
-        """
-        logging.debug("Validating config data")
-        v = Draft4Validator(self._schema())
-        errors = sorted(v.iter_errors(json), key=lambda e: e.path)
-        if len(errors) > 0:
-            for error in errors:
-                logging.error(error.message)
-            exit(1)
-        logging.debug("Config data validated")
-        return
-
-    def load_config(self,yml_file_p):
-        """
-        Transform an opened yaml file in json
-        
-        Args:
-            yml_file_p:  A pointer to a file opened in read mode
-        
-        Return:
-            dict: The yaml file in dict format
-        """
-        logging.debug("Loading config file")
-        response = yaml.load(yml_file_p)
-        logging.debug("Config file loaded")
-        return response
 
     @classmethod
     def run(cls, args):
@@ -107,10 +88,11 @@ class Operation(Documentable):
         #return
 
         obj = cls()
+        obj.set_args(args)
 
         obj.before_start()
 
-        p1 = multiprocessing.Process(name="main",target=obj._run_wrapper, args=(args, obj.operation_state, ))
+        p1 = multiprocessing.Process(name="main",target=obj._run_wrapper, args=(obj.operation_state, ))
         p2 = multiprocessing.Process(name="timer",target=obj.on_running, args=(obj.operation_state, ))
         p1.start()
         p2.start()
@@ -121,8 +103,8 @@ class Operation(Documentable):
 
         return
 
-    def _run_wrapper(self, args, operation_state):
-        self._run(args=args)
+    def _run_wrapper(self, operation_state):
+        self.set_output(self._run())
         self.set_state('on_completion')
         return
 
