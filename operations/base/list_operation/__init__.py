@@ -20,7 +20,7 @@ class Listoperation(Operation):
         return
 
     def _run(self):
-        headers = ['Library', 'Operation', 'Command', 'Description']
+        headers = ['Library', 'Command', 'Operation', 'Description']
         data = []
         for library_class in Library.__subclasses__():
             for operation_key, operation in library_class.operations().items():
@@ -33,4 +33,4 @@ class Listoperation(Operation):
 
                 data.append([colored(library_class.name(),'blue'), colored(operation_key, color), operation.name(), operation.description()[:50]])
         print(tabulate.tabulate(data,headers))
-        return
+        return True

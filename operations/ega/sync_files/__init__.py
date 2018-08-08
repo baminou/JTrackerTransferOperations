@@ -7,6 +7,14 @@ import shutil
 
 class SyncFiles(YmlConfigOperation):
 
+    @staticmethod
+    def name():
+        return "sync"
+
+    @staticmethod
+    def description():
+        return "Synchronize EGA files from JTracker server with EGA files in git repository on a local machine"
+
     def _parser(self, main_parser):
         return
 

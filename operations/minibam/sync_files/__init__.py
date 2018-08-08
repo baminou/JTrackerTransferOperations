@@ -16,7 +16,6 @@ class SyncFiles(Operation):
     def description():
         return "Synchronize mini-bam file transfer on JTracker with Github Repo"
 
-    @staticmethod
     def _parser(self, main_parser):
         main_parser.add_argument('-p', '--payload', dest='payload', required=True,
                                              type=argparse.FileType('r'), help="Song payload json file")

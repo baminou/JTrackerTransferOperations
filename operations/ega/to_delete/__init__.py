@@ -14,7 +14,7 @@ class ToDelete(YmlConfigOperation):
     def description():
         return "Generate a list of files to be deleted on EGA Aspera server"
 
-    def parser(self, main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('-c', '--config', dest='config', required=True, help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-o', '--output-file', dest='output_file', required=True)
 

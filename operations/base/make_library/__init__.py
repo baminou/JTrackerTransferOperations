@@ -13,7 +13,7 @@ class Makelibrary(Operation):
 
     @staticmethod
     def description():
-        return "Create a new library"
+        return "Create a new library for operations"
 
     def _parser(self, main_parser):
         main_parser.add_argument('name')

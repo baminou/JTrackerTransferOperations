@@ -3,8 +3,6 @@
 
 import argparse
 from kernel.console import libraries
-import sys
-
 
 def main():
     parser = argparse.ArgumentParser(description='Create and test re-usable tools')
