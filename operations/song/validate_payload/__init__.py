@@ -14,8 +14,7 @@ class Validatepayload(Operation):
     def description():
         return "Synchronize mini-bam file transfer on JTracker with Github Repo"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('-c', '--config',
                                          dest='config',
                                          required=True,
@@ -25,7 +24,7 @@ class Validatepayload(Operation):
     def _schema(self):
         return {}
 
-    def _run(self,args):
+    def _run(self):
         for error in validate_payload(json.load(args.payload)):
             print(" ls- "+error)
         return

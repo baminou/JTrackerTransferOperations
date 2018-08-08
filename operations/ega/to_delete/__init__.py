@@ -1,10 +1,10 @@
-from operation_types.operation import Operation
+from operation_types.yml_config_operation import YmlConfigOperation
 import logging
 import ega_transfer
 from entities.ega import EGA
 import argparse
 
-class ToDelete(Operation):
+class ToDelete(YmlConfigOperation):
 
     @staticmethod
     def name():
@@ -14,8 +14,7 @@ class ToDelete(Operation):
     def description():
         return "Generate a list of files to be deleted on EGA Aspera server"
 
-    @staticmethod
-    def parser(main_parser):
+    def parser(self, main_parser):
         main_parser.add_argument('-c', '--config', dest='config', required=True, help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-o', '--output-file', dest='output_file', required=True)
 
@@ -32,19 +31,19 @@ class ToDelete(Operation):
             "required": ["jtracker_host", "jtracker_user","queues","aspera_user", "aspera_host"]
         }
 
-    def _run(self, args):
+    def _run(self):
         logging.info("Generate a list of files to delete from the EGA Aspera server")
 
         logging.info("Get EGA box file IDs")
-        ega_box_fids = ega_transfer.get_ega_box_fids(self._config.get('aspera_host'),self._config.get('aspera_user'))
+        ega_box_fids = ega_transfer.get_ega_box_fids(self.config.get('aspera_host'),self.config.get('aspera_user'))
         ega_completed_fids = []
 
-        for queue in self._config.get('queues'):
-            ega_completed_fids = ega_completed_fids + ega_transfer.get_etcd_jtracker_egafids(self._config.get('jtracker_host'),self._config.get('jtracker_user'),queue,'completed')
+        for queue in self.config.get('queues'):
+            ega_completed_fids = ega_completed_fids + ega_transfer.get_etcd_jtracker_egafids(self.config.get('jtracker_host'),self.config.get('jtracker_user'),queue,'completed')
 
-        ega = EGA(self._config.get('aspera_host'),self._config.get('aspera_user'))
+        ega = EGA(self.config.get('aspera_host'),self.config.get('aspera_user'))
 
-        with open(args.output_file,'w') as fp:
+        with open(self.args.output_file,'w') as fp:
             for fid in ega_box_fids:
                 if fid in ega_completed_fids:
                     for file in ega.retrieve_files(fid):

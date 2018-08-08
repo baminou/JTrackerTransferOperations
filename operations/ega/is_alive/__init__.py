@@ -16,8 +16,8 @@ class Isalive(Operation):
         main_parser.add_argument('aspera_host', help="URL of the aspera server")
         return
 
-    def _run(self, args):
-        response = os.system('ping -c 1 '+args.aspera_host)
+    def _run(self):
+        response = os.system('ping -c 1 '+self.args.aspera_host)
         if response == 0:
             print(True)
             return

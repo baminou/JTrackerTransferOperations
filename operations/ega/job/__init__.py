@@ -2,13 +2,10 @@ from operations.ega.utils.ega_audit import EGAAudit
 import json
 import ega_transfer
 import os
-from operation_types.operation import Operation
+from operation_types.yml_config_operation import YmlConfigOperation
 import argparse
 
-class Job(Operation):
-
-    def __init__(self):
-        self._config = None
+class Job(YmlConfigOperation):
 
     @staticmethod
     def name():
@@ -18,8 +15,7 @@ class Job(Operation):
     def description():
         return "Generate the job json files needed to run JTracker workflow"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('-c', '--config', dest='config', required=True, help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-a', '--audit', dest='audit', required=True)
         main_parser.add_argument('-o', '--output', dest='output_dir', required=True)
@@ -72,22 +68,20 @@ class Job(Operation):
         }
 
 
-    def _run(self,args):
-        self._config = self.load_config(args.config)
-        self._validate_json_config(self._config)
+    def _run(self):
 
         # Load all EGAFIDs from EGA aspera server
-        ega_box_fids = ega_transfer.get_ega_box_fids(self._config.get('aspera_info').get('server'),self._config.get('aspera_info').get('user'))
+        ega_box_fids = ega_transfer.get_ega_box_fids(self.config.get('aspera_info').get('server'),self.config.get('aspera_info').get('user'))
 
         # Load all EGAFIDs from JTracker servers and repo
-        jtracker_fids = ega_transfer.get_all_jtracker_egafids(self._config.get('etcd_jtracker').get('hosts'),self._config.get('old_jtracker').get('dirs'))
+        jtracker_fids = ega_transfer.get_all_jtracker_egafids(self.config.get('etcd_jtracker').get('hosts'),self.config.get('old_jtracker').get('dirs'))
 
         # Load all EGAFIDs from the audit csv file
-        audit_fids = ega_transfer.get_audit_fids(args.audit)
+        audit_fids = ega_transfer.get_audit_fids(self.args.audit)
 
         for id in audit_fids:
             if id in ega_box_fids and id not in jtracker_fids:
-                job_name, job_data = EGAAudit(args.audit).get_job(id,self._config.get('metadata_repo'))
-                file_name = os.path.join(args.output_dir,job_name+".json")
+                job_name, job_data = EGAAudit(self.args.audit).get_job(id,self.config.get('metadata_repo'))
+                file_name = os.path.join(self.args.output_dir,job_name+".json")
                 with open(file_name, 'w') as fp:
                     json.dump(job_data,fp,indent=4,sort_keys=True)

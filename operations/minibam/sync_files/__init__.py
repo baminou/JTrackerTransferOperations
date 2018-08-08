@@ -17,7 +17,7 @@ class SyncFiles(Operation):
         return "Synchronize mini-bam file transfer on JTracker with Github Repo"
 
     @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('-p', '--payload', dest='payload', required=True,
                                              type=argparse.FileType('r'), help="Song payload json file")
 
@@ -44,7 +44,7 @@ class SyncFiles(Operation):
             "required": ["jtracker_host","jtracker_user","git_dirs","queues"]
         }
 
-    def _run(self, args):
+    def _run(self):
         logging.info("Sync mini-bam files with git repository")
         jobname_state = minibam_transfer.get_jobnames_state(self._config.get('jtracker_host'),self._config.get('jtracker_user'),self._config.get('queues'))
 

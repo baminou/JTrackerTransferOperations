@@ -14,16 +14,15 @@ class Runnable(Operation):
     def description():
         return "List the jobs that can be run from a Github Repository"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self,main_parser):
         main_parser.add_argument('job_directory', help="Directory containing .json job files.")
         main_parser.add_argument('aspera_host', help="EGA Aspera host")
         main_parser.add_argument('aspera_user', help="EGA Aspera user")
 
-    def _run(self, args):
-        job_dir = args.job_directory
-        aspera_host = args.aspera_host
-        aspera_user = args.aspera_user
+    def _run(self):
+        job_dir = self.args.job_directory
+        aspera_host = self.args.aspera_host
+        aspera_user = self.args.aspera_user
 
         ega = EGA(aspera_host, aspera_user)
         dbox = ega.dbox_egafids()

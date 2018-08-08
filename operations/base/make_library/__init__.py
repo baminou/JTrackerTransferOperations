@@ -19,6 +19,6 @@ class Makelibrary(Operation):
         main_parser.add_argument('name')
         return
 
-    def _run(self, args):
-        library_create(args.name)
+    def _run(self):
+        library_create(self.args.name)
         return

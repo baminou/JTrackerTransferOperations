@@ -5,10 +5,10 @@ import logging
 
 import ega_transfer
 import csv
-from operation_types.operation import Operation
+from operation_types.yml_config_operation import YmlConfigOperation
 import argparse
 
-class ToStage(Operation):
+class ToStage(YmlConfigOperation):
 
     @staticmethod
     def name():
@@ -18,8 +18,7 @@ class ToStage(Operation):
     def description():
         return "Generate a list of files to be staged on EGA Aspera server"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('-c', '--config', dest='config', required=True,  help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-a', '--audit', dest='audit', required=True)
         main_parser.add_argument('-o', '--output-file', dest='output_file', required=True)
@@ -72,21 +71,21 @@ class ToStage(Operation):
         }
 
 
-    def _run(self,args):
+    def _run(self):
         logging.info("Generate to stage for EGA Starts")
 
         logging.info("Load EGAFIDs")
         # Load all EGAFIDs from EGA aspera server
-        ega_box_fids = ega_transfer.get_ega_box_fids(self._config.get('aspera_info').get('server'),self._config.get('aspera_info').get('user'))
+        ega_box_fids = ega_transfer.get_ega_box_fids(self.config.get('aspera_info').get('server'),self.config.get('aspera_info').get('user'))
 
         # Load all EGAFIDs from JTracker servers and repo
-        jtracker_fids = ega_transfer.get_all_jtracker_egafids(self._config.get('etcd_jtracker').get('hosts'),self._config.get('old_jtracker').get('dirs'))
+        jtracker_fids = ega_transfer.get_all_jtracker_egafids(self.config.get('etcd_jtracker').get('hosts'),self.config.get('old_jtracker').get('dirs'))
 
         # Load all EGAFIDs from the audit csv file
-        audit_fids = ega_transfer.get_audit_fids(args.audit)
+        audit_fids = ega_transfer.get_audit_fids(self.args.audit)
 
-        to_stage = ega_transfer.get_files_to_stage(list(set(audit_fids) - set(ega_box_fids + jtracker_fids)), args.audit)
-        with open(args.output_file, 'w') as fp:
+        to_stage = ega_transfer.get_files_to_stage(list(set(audit_fids) - set(ega_box_fids + jtracker_fids)), self.args.audit)
+        with open(self.args.output_file, 'w') as fp:
             dict_writer = csv.DictWriter(fp, to_stage[0].keys(), delimiter='\t')
             dict_writer.writeheader()
             dict_writer.writerows(to_stage)

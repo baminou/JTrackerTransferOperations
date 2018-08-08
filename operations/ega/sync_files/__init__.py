@@ -1,7 +1,6 @@
 
 from operation_types.yml_config_operation import YmlConfigOperation
 from ..utils.etcd_jtracker import ETCDJTracker
-from ..utils.github_jtracker import GithubJTracker
 import os
 import json
 import shutil

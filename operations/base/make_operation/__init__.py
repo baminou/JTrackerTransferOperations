@@ -15,8 +15,7 @@ class MakeOperation(Operation):
     def description():
         return "Create a new operation"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         main_parser.add_argument('library', help="Name of the library to add the operation")
         main_parser.add_argument('operation', help="Name of the operation")
         return
