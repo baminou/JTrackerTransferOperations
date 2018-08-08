@@ -1,6 +1,6 @@
 
 
-from operations.operation import Operation
+from operation_types.operation import Operation
 import shutil
 import os
 from ..utils import library_create, library_path
@@ -21,13 +21,13 @@ class MakeOperation(Operation):
         main_parser.add_argument('operation', help="Name of the operation")
         return
 
-    def _run(self, args):
+    def _run(self):
 
         #Retrieve the library name and path
-        library = args.library
+        library = self.args.library
 
         #Retrieve the operation name and path
-        operation = args.operation
+        operation = self.args.operation
         operation_path = os.path.join(library_path(library),operation)
 
         template_path = os.path.join(os.getcwd(),'templates','operation')

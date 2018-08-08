@@ -1,6 +1,6 @@
 
-from operations.operation import Operation
-from ..utils import is_alive, validate_payload
+from operation_types.operation import Operation
+from ..utils import validate_payload
 import json
 import argparse
 

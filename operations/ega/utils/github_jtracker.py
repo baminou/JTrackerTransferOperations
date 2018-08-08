@@ -1,6 +1,6 @@
 
 
-from .jtracker import JTracker
+from entities.jtracker import JTracker
 import os
 import fnmatch
 import json

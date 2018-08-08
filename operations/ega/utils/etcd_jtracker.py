@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .jtracker import JTracker
+from entities.jtracker import JTracker
 import requests
 import json
 import logging
@@ -16,6 +16,9 @@ class ETCDJTracker(JTracker):
         self._queue = queue
         self._jobs = self._load_jobs()
         return
+
+    def get_jobs(self, state=None):
+        return self._jobs
 
     def _load_jobs(self):
         return requests.get(self._server+"/api/jt-jess/v0.1/jobs/owner/"+self._user+"/queue/"+self._queue).json()

@@ -1,10 +1,8 @@
 import logging
 import yaml
 from jsonschema import Draft4Validator
-from .operation import Operation
+from operation_types.operation import Operation
 from argparse import FileType
-import jsonschema
-
 
 from abc import abstractmethod
 
@@ -24,14 +22,14 @@ class YmlConfigOperation(Operation):
         super(YmlConfigOperation, self)._before_start()
         self.__load_config(self.args.config)
         self.__validate_config()
-        return
+        return True
 
     def __validate_config(self):
         v = Draft4Validator(self._config_schema())
         errors = sorted(v.iter_errors(self.config), key=lambda e: e.path)
         if len(errors) > 0:
             for error in errors:
-                logging.error(error.message)
+                logging.error("Confguration file: "+error.message)
         return
 
     def __load_config(self, yml_file_p):

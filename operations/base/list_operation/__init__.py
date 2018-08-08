@@ -1,7 +1,7 @@
 
-from operations.operation import Operation
+from operation_types.operation import Operation
 from operations.library import Library
-import sys, inspect
+import inspect
 from termcolor import colored
 import tabulate
 
@@ -16,11 +16,10 @@ class Listoperation(Operation):
     def description():
         return "List all operations"
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         return
 
-    def _run(self, args):
+    def _run(self):
         headers = ['Library', 'Operation', 'Command', 'Description']
         data = []
         for library_class in Library.__subclasses__():

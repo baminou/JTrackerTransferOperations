@@ -1,4 +1,4 @@
-from operations.operation import Operation
+from operation_types.operation import Operation
 import logging
 import ega_transfer
 from entities.ega import EGA

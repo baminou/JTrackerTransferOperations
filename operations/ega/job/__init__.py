@@ -1,11 +1,8 @@
-
-import logging
-
-from entities.ega_audit import EGAAudit
+from operations.ega.utils.ega_audit import EGAAudit
 import json
 import ega_transfer
 import os
-from operations.operation import Operation
+from operation_types.operation import Operation
 import argparse
 
 class Job(Operation):

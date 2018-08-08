@@ -5,7 +5,7 @@ import logging
 
 import ega_transfer
 import csv
-from operations.operation import Operation
+from operation_types.operation import Operation
 import argparse
 
 class ToStage(Operation):

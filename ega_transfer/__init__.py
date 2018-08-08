@@ -1,9 +1,9 @@
 
 import logging
-from entities.ega_audit import EGAAudit
+from operations.ega.utils.ega_audit import EGAAudit
 from entities.ega import EGA
-from entities.etcd_jtracker import ETCDJTracker
-from entities.github_jtracker import GithubJTracker
+from operations.ega.utils.etcd_jtracker import ETCDJTracker
+from operations.ega.utils.github_jtracker import GithubJTracker
 import os
 
 def get_jtracker_fids(jtracker_instance,state=None):

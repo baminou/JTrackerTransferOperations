@@ -1,5 +1,5 @@
 
-from operations.operation import Operation
+from operation_types.operation import Operation
 
 class NEWOPERATION(Operation):
 
@@ -11,9 +11,8 @@ class NEWOPERATION(Operation):
     def description():
         return "NEWOPERATION has not been documented yet."
 
-    @staticmethod
-    def parser(main_parser):
+    def _parser(self, main_parser):
         return
 
-    def _run(self, args):
+    def _run(self):
         raise NotImplementedError("NEWOPERATION not implemented yet.")

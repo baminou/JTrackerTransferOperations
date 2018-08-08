@@ -3,7 +3,7 @@
 
 import argparse
 from kernel.console import libraries
-
+import sys
 
 
 def main():
@@ -11,11 +11,8 @@ def main():
 
     subparsers = parser.add_subparsers()
 
-    run_group = subparsers.add_parser('run')
-    run_subparsers = run_group.add_subparsers()
-
     for library_key, library in libraries().items():
-        library_group = run_subparsers.add_parser(library_key, description=library.description())
+        library_group = subparsers.add_parser(library_key, description=library.description())
         library_subparsers = library_group.add_subparsers()
 
         for command, operation in library.operations().items():

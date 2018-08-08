@@ -1,8 +1,9 @@
 
-from operations.yml_config_operation import YmlConfigOperation
-import time
+from operation_types.yml_config_operation import YmlConfigOperation
+from operation_types.json_operation import JsonOperation
 
-class Test(YmlConfigOperation):
+
+class Test(YmlConfigOperation, JsonOperation):
 
     @staticmethod
     def name():
@@ -19,5 +20,4 @@ class Test(YmlConfigOperation):
         return
 
     def _run(self):
-        print(self.args.config.readlines())
         return 1

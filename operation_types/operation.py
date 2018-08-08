@@ -3,7 +3,7 @@ import logging
 import yaml
 from abc import abstractmethod
 from jsonschema import Draft4Validator
-from .documentable import Documentable
+from operations.documentable import Documentable
 import os
 import multiprocessing
 import threading
@@ -77,29 +77,20 @@ class Operation(Documentable):
         :param args: 
         :return: 
         """
-        # Load the config file containing the needed information
-        # If the config file has something missing, a validation error might raise, depending on the error
-        #if hasattr(args,'config'):
-        #    logging.info("Configuration yaml file")
-        #    self._config = self.load_config(args.config)
-        #    self._validate_json_config(self._config)
-        operation = cls()
-        #operation._run(args)
-        #return
-
         obj = cls()
         obj.set_args(args)
 
-        obj.before_start()
+        run = obj.before_start()
 
-        p1 = multiprocessing.Process(name="main",target=obj._run_wrapper, args=(obj.operation_state, ))
-        p2 = multiprocessing.Process(name="timer",target=obj.on_running, args=(obj.operation_state, ))
-        p1.start()
-        p2.start()
-        p1.join()
-        p2.join()
+        if run:
+            p1 = multiprocessing.Process(name="main",target=obj._run_wrapper, args=(obj.operation_state, ))
+            p2 = multiprocessing.Process(name="timer",target=obj.on_running, args=(obj.operation_state, ))
+            p1.start()
+            p2.start()
+            p1.join()
+            p2.join()
 
-        obj.on_completed()
+            obj.on_completed()
 
         return
 
@@ -117,8 +108,9 @@ class Operation(Documentable):
         obj._parser(main_parser)
         return
 
+    @abstractmethod
     def _parser(self, main_parser):
-        return main_parser
+        return
 
     @staticmethod
     def environ_or_required(key):
@@ -128,12 +120,12 @@ class Operation(Documentable):
             return {'required': True}
 
     def before_start(self):
-        self._before_start()
+        result = self._before_start()
         self.operation_state['state'] = 'running'
-        return
+        return result
 
     def _before_start(self):
-        return
+        return True
 
     def on_completed(self):
         self._on_completed()

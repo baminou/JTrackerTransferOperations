@@ -1,5 +1,5 @@
 
-from operations.operation import Operation
+from operation_types.operation import Operation
 import os
 
 class Isalive(Operation):
