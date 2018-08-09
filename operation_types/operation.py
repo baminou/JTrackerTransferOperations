@@ -14,7 +14,7 @@ class Operation(Documentable):
     Two methods have to be implemented for childen classes.
     _schema and _run"""
 
-    def __init__(self, on_running_timer=0.5):
+    def __init__(self, on_running_timer=2):
         self.__operation_state = multiprocessing.Manager().dict({'state': 'running'})
         self._on_running_timer = on_running_timer
         self.args = None

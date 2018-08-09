@@ -1,4 +1,4 @@
-### Uperations
+## Uperations
 
 This program helps you create standalone and re-usable tools that can be easily integrated in your workflows.
 The purpose of this project is to create python tools that can be re-used accross different workflow languages.
@@ -11,19 +11,19 @@ The main components to know are Libraries, Operations and Commands.
 * Library: A group of operations
 * A command to execute in the terminal to run the Operation
 
-#### Create a library
+### Create a library
 The first thing to do is to create a library to contain your operations.
 ```bash
 ./main.py base make:library {LIBRARY_NAME}
 ```
 
-#### Create an operation
+### Create an operation
 Once you have a library, you can start adding operations.
 ```bash
 ./main.py base make:operation {LIBRARY_NAME} {OPERATION_NAME}
 ```
 
-#### Add your operation to the library for access in command line
+### Add your operation to the library for access in command line
 1. Open ./operations/{LIBRARY_NAME}/__init__.py
 2. Import your operation class at the top of the file.
 ```python
@@ -40,17 +40,17 @@ from .{operation_package} import {OperationClass}
 
 ```
 
-#### List all available operations
+### List all available operations
 ```bash
 ./main.py base list:operations
 ```
 
-#### Retrieve information about a library
+### Retrieve information about a library
 ```bash
 ./main.py base {LIBRARY_NAME} -h
 ```
 
-#### Retrieve information about an operation
+### Retrieve information about an operation
 ```bash
 ./main.py base {LIBRARY_NAME} {OPERATION_NAME} -h
 ```
