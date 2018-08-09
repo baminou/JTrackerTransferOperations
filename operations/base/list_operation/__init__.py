@@ -17,12 +17,15 @@ class Listoperation(Operation):
         return "List all operations"
 
     def _parser(self, main_parser):
+        main_parser.add_argument('-l', '--library', dest='library', required=False)
         return
 
     def _run(self):
         headers = ['Library', 'Command', 'Operation', 'Description']
         data = []
         for library_class in Library.__subclasses__():
+            if self.args.library and not self.args.library == library_class.name():
+                continue
             for operation_key, operation in library_class.operations().items():
                 color = "red"
                 try:
