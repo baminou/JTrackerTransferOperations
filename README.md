@@ -17,6 +17,15 @@ The first thing to do is to create a library to contain your operations.
 ./main.py base make:library {LIBRARY_NAME}
 ```
 
+### Add your library to kernel/console.py
+```python
+def libraries():
+    return {
+        ...,
+        library_name: LIBRARY_NAME
+    }
+```
+
 ### Create an operation
 Once you have a library, you can start adding operations.
 ```bash
