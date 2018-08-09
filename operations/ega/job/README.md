@@ -21,5 +21,5 @@ Run the command:
 ```bash
 ./main.py ega job -c resources/ega/job/config.yml -a [AUDIT] -o [OUTPUT_DIR]
 ```
-AUDIT: Path of the audit TSV file containing information for the transfer
-OUTPUT_DIR: Path of the output directory
+- AUDIT: Path of the audit TSV file containing information for the transfer
+- OUTPUT_DIR: Path of the output directory
