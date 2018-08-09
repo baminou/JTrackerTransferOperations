@@ -1,27 +1,25 @@
 ### Generate job files required for JTracker to run EGA workflow
 
-- Config File parameters:
-   - etcd_jtracker: 
-      - hosts:
-         - url: JTracker server IP address
-         - queues:
-            - user: JTracker username
-            - id: JTracker queue id
-   - old_jtracker:
-      - dirs: List of Old JTracker directories
-   - aspera_info:
-      - server: The address of the EGA Aspera box
-      - user: The username downloading data from EGA Aspera box
-   - metadata_repo: The URL of the metadata repository: E.g https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/v20180321
-- Command arguments:
-   - -c/--config: Configuration file containing the previous config file parameters
-   - -a/--audit: Audit file containing the jobs to be generated
-   - -o/--output: The output directory for the json files
+This operation is generating the list of JSON files required for JTracker. Logic:
+1. Retrieve all EGAFIDs that are listed as available on EGA Aspera server
+2. Retrieve all EGAFIDs that have been integrated to JTracker in the previoux version (Github) and the new version (ETCD)
+3. Retrieve all EGAFIDs available in a TSV audit report
+4. Keep EGAFIDs that are in the audit, on the Aspera server and that haven't been integrated to JTracker yet.
 
-To see the validation schema of the EGA files to delete operation, run:
+To generate the jobs, first generate the config file for the operation:
+```bash
+./main.py base publish ega job
+```
+The config file is going to be generated under:
+```bash
+./resources/ega/job/config.yml
+```
 
-``./main.py ega:job:schema``
+Enter the informations required in the yaml file
 
-To run the EGA files to delete operation, run:
-
-``./main.py ega:job --config ega_job.yml --output outdir``
+Run the command:
+```bash
+./main.py ega job -c resources/ega/job/config.yml -a [AUDIT] -o [OUTPUT_DIR]
+```
+AUDIT: Path of the audit TSV file containing information for the transfer
+OUTPUT_DIR: Path of the output directory
