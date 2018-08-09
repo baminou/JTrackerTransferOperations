@@ -1,0 +1,15 @@
+etcd_jtracker:
+  hosts:
+    -
+      url: # Jtracker server URL with port, Eg. http://localhost:8001
+      queues:
+        -
+          user: #Jtracker username
+          id: # ID of the queue
+old_jtracker:
+  dirs:
+    - # List of jtracker ega transfer old dirs: Eg. ~/Documents/ega-file-transfer-to-collab-1-jtracker/ega-file-transfer-to-collab.0.6.jtracker/
+aspera_info:
+  server: # The address of the EGA Aspera server
+  user: # Ega Aspera server username
+metadata_repo: # The version of the xml audit: Eg. https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/v20180321

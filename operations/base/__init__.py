@@ -24,5 +24,5 @@ class Base(Library):
             'make:operation': MakeOperation,
             'list:operations': Listoperation,
             'yaml_to_json': Yamltojson,
-            'publish': Publish
+            'resources': Publish
         }
