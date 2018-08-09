@@ -2,7 +2,6 @@ from operation_types.yml_config_operation import YmlConfigOperation
 import logging
 import ega_transfer
 from entities.ega import EGA
-import argparse
 
 class ToDelete(YmlConfigOperation):
 
@@ -15,10 +14,9 @@ class ToDelete(YmlConfigOperation):
         return "Generate a list of files to be deleted on EGA Aspera server"
 
     def _parser(self, main_parser):
-        main_parser.add_argument('-c', '--config', dest='config', required=True, help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-o', '--output-file', dest='output_file', required=True)
 
-    def _schema(self):
+    def _config_schema(self):
         return {
             "jtracker_host": {"type": "string"},
             "jtracker_user": {"type": "string"},

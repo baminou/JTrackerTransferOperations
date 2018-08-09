@@ -16,11 +16,10 @@ class Job(YmlConfigOperation):
         return "Generate the job json files needed to run JTracker workflow"
 
     def _parser(self, main_parser):
-        main_parser.add_argument('-c', '--config', dest='config', required=True, help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-a', '--audit', dest='audit', required=True)
         main_parser.add_argument('-o', '--output', dest='output_dir', required=True)
 
-    def _schema(self):
+    def _config_schema(self):
         return {
             "etcd_jtracker": {
                 "type": "object",
@@ -78,6 +77,8 @@ class Job(YmlConfigOperation):
 
         # Load all EGAFIDs from the audit csv file
         audit_fids = ega_transfer.get_audit_fids(self.args.audit)
+
+        #TODO Check the files that have to be staged and add a warning if not
 
         for id in audit_fids:
             if id in ega_box_fids and id not in jtracker_fids:

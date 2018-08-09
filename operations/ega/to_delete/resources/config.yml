@@ -1,0 +1,6 @@
+jtracker_host: # JTracker server url with port number
+jtracker_user: # JTracker user name
+queues:
+  - # List of queues under the user
+aspera_host: # Aspera server
+aspera_user: # Aspera username
