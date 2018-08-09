@@ -13,5 +13,6 @@ Need help to run the operation
 
 Run the command
 ```bash
-./main.py ega to_delete resources/ega/to_delete/config.yml -o to_delete
+./main.py ega to_delete resources/ega/to_delete/config.yml -o [OUTPUT_FILE]
 ```
+- OUTPUT_FILE: File where to write the list of files to delete
