@@ -19,11 +19,10 @@ class ToStage(YmlConfigOperation):
         return "Generate a list of files to be staged on EGA Aspera server"
 
     def _parser(self, main_parser):
-        main_parser.add_argument('-c', '--config', dest='config', required=True,  help="A valid configuration yaml file", type=argparse.FileType('r'))
         main_parser.add_argument('-a', '--audit', dest='audit', required=True)
         main_parser.add_argument('-o', '--output-file', dest='output_file', required=True)
 
-    def _schema(self):
+    def _config_schema(self):
         return {
             "etcd_jtracker": {
                 "type": "object",
@@ -59,7 +58,6 @@ class ToStage(YmlConfigOperation):
                     "required": ["dirs"]
                 }
             },
-            "metadata_repo": {"type": "string"},
             'aspera_info':{
                 "type": "object",
                 "properties": {
@@ -67,7 +65,7 @@ class ToStage(YmlConfigOperation):
                     "user": {"type": "string"}
                 }
             },
-            "required": ["etcd_jtracker","old_jtracker","metadata_repo",'aspera_info']
+            "required": ["etcd_jtracker","old_jtracker",'aspera_info']
         }
 
 

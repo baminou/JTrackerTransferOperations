@@ -8,7 +8,7 @@ class Validatepayload(Operation):
 
     @staticmethod
     def name():
-        return "sync"
+        return "validate_payload"
 
     @staticmethod
     def description():

@@ -1,27 +1,28 @@
 ### Generate list of EGA accession information in TSV format for files to stage
 
-- Config File parameters:
-   - etcd_jtracker: 
-      - hosts:
-         - url: JTracker server IP address
-         - queues:
-            - user: JTracker username
-            - id: JTracker queue id
-   - old_jtracker:
-      - dirs: List of Old JTracker directories
-   - aspera_info:
-      - server: The address of the EGA Aspera box
-      - user: The username downloading data from EGA Aspera box
-   - metadata_repo: The URL of the metadata repository: E.g https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/v20180321
-- Command arguments:
-   - -c/--config: Configuration file containing the previous config file parameters
-   - -a/--audit: Audit file containing the jobs to be generated
-   - -o/--output-file: File path to save the list of files
+This operation generates a TSV file containing a list of files to stage on EGA server.
+Explanation of the logic:
 
-To see the validation schema of the EGA files to delete operation, run:
+1. Retrieve all EGAFIDs on EGA aspera server
+2. Retrieve all EGAFIDs in old and new jtracker
+3. Retrieve all EGAFIDs in the .tsv audit file
+4. List the files that are in the audit, not in JTracker and not on aspera server
 
-``./main.py ega:stage:schema``
+First publish the config file
+```bash
+./main.py base publish ega to_stage
+```
 
-To run the EGA files to delete operation, run:
+For help, run:
 
-``./main.py ega:stage --config ega_stage.yml --output-file output.tsv``
+```bash
+./main.py ega to_stage -h
+```
+
+To run the operation:
+```bash
+./main.py ega to_stage resources/ega/to_stage/config.yml -a [AUDIT_TSV] -o [OUTPUT_FILE]
+```
+
+- AUDIT_TSV: Audit.tsv file containing the EGA information
+- OUTPUT_FILE: Output file for the files to stage

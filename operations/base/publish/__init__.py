@@ -2,6 +2,9 @@
 from operation_types.operation import Operation
 import os
 import shutil
+from operations.library import Library
+from operation_types.operation import Operation
+import inspect
 
 class Publish(Operation):
 
@@ -23,10 +26,17 @@ class Publish(Operation):
         lib_dir = os.path.join(resource_dir,self.args.library)
         operation_dir = os.path.join(lib_dir, self.args.operation)
 
-        if not os.path.isdir(resource_dir):
-            os.mkdir(resource_dir)
-        if not os.path.isdir(lib_dir):
-            os.mkdir(lib_dir)
+        for library_class in Library.__subclasses__():
+            if library_class.name() == self.args.library:
+                for key in library_class.operations():
+                    if key == self.args.operation:
+                        src = os.path.join(os.path.dirname(inspect.getfile(library_class.operations()[key])),'resources')
 
-        shutil.copytree(os.path.join(os.getcwd(),'operations',self.args.library,self.args.operation,'resources'),operation_dir)
+                        if not os.path.isdir(resource_dir):
+                            os.mkdir(resource_dir)
+                        if not os.path.isdir(lib_dir):
+                            os.mkdir(lib_dir)
 
+                        shutil.copytree(src,operation_dir)
+                        return True
+        return

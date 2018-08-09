@@ -1,0 +1,14 @@
+etcd_jtracker:
+  hosts:
+    -
+      url: #JTracker server URL
+      queues:
+        -
+          user: #User name onf jtracker
+          id: #ID of the queue
+old_jtracker:
+  dirs:
+    - # List of old jtracker directories:  e.g. ~/Documents/ega-file-transfer-to-collab-1-jtracker/ega-file-transfer-to-collab.0.6.jtracker/
+aspera_info:
+  server: # EGA aspera server
+  user: # EGA aspera username

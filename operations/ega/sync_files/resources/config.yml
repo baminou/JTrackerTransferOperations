@@ -1,0 +1,4 @@
+jtracker_host: # JTracker host with port
+jtracker_user: # JTracker username
+jtracker_queue: # Queue ID
+git_repo:  # Local repository containg backlog-jobs completed-jobs failed-jobs queued-jobs
