@@ -94,7 +94,7 @@ def get_files_to_stage(egafids, tsv_file):
         values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
                                                        "ICGC Submitted Sample ID","EGA Sample Accession","EGA Experiment Accession",
                                                        "EGA Run Accession","EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
-                                                       "Unencrypted Checksum","EGA Dataset Accession")
+                                                       "Unencrypted Checksum","EGA Dataset Accession","File Size")
         result.append(dict(zip(keys,values)))
         logging.debug(values)
     logging.info("To stage informations retrieved")
