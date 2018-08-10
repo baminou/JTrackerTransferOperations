@@ -10,7 +10,7 @@ class Listoperation(Operation):
 
     @staticmethod
     def name():
-        return "Listoperation"
+        return "list_operation"
 
     @staticmethod
     def description():

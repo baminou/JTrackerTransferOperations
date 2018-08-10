@@ -39,4 +39,4 @@ class Publish(Operation):
 
                         shutil.copytree(src,operation_dir)
                         return True
-        return
+        return True

@@ -6,6 +6,9 @@ from .make_operation import MakeOperation
 from .list_operation import Listoperation
 from .yaml_to_json import Yamltojson
 from .publish import Publish
+from .install_operation import Installoperation
+from .install_library import Installlibrary
+from .install import Install
 
 class Base(Library):
 
@@ -24,5 +27,8 @@ class Base(Library):
             'make:operation': MakeOperation,
             'list:operations': Listoperation,
             'yaml_to_json': Yamltojson,
-            'publish': Publish
+            'publish': Publish,
+            'install:operation': Installoperation,
+            'install:library': Installlibrary,
+            'install': Install
         }

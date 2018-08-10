@@ -8,6 +8,7 @@ import os
 import multiprocessing
 import threading
 import time
+import inspect
 
 class Operation(Documentable):
     """This abstract class is the mother class for operations. An operation is a specific action on a JTracker workflow.
@@ -143,3 +144,10 @@ class Operation(Documentable):
 
     def _on_running(self):
         return
+
+    @classmethod
+    def install(cls):
+        requirements = os.path.dirname(inspect.getfile(cls))+"/requirements.txt"
+        if os.path.isfile(requirements):
+            os.system('pip3 install -r %s' % requirements)
+
