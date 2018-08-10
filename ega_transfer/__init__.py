@@ -87,14 +87,14 @@ def get_files_to_stage(egafids, tsv_file):
         raise FileNotFoundError(tsv_file)
     logging.info("Retrieve EGAFIDs from audit report to stage: %s" % (tsv_file))
     keys = ['project_code','submitter_sample_id','ega_sample_id','ega_experiment_id','ega_run_id','file_name','ega_file_id',
-            'encrypted_file_md5sum','file_md5sum','dataset_id']
+            'encrypted_file_md5sum','file_md5sum','dataset_id','file_size','ega_analysis_accession']
 
     result = []
     for fid in egafids:
         values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
                                                        "ICGC Submitted Sample ID","EGA Sample Accession","EGA Experiment Accession",
                                                        "EGA Run Accession","EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
-                                                       "Unencrypted Checksum","EGA Dataset Accession","File Size")
+                                                       "Unencrypted Checksum","EGA Dataset Accession","File Size","EGA Analysis Accession")
         result.append(dict(zip(keys,values)))
         logging.debug(values)
     logging.info("To stage informations retrieved")
