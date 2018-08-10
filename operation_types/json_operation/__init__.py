@@ -3,6 +3,7 @@ from jsonschema import Draft4Validator
 from operation_types.operation import Operation
 from argparse import FileType
 from abc import abstractmethod
+import json
 
 
 class JsonOperation(Operation):
@@ -18,12 +19,13 @@ class JsonOperation(Operation):
 
     def _before_start(self):
         super(JsonOperation, self)._before_start()
-        return
+        self.json = json.load(self.args.json)
+        return True
 
-    def __validate_config(self):
+    def __validate_json(self):
         v = Draft4Validator(self._config_schema())
-        errors = sorted(v.iter_errors(self.config), key=lambda e: e.path)
+        errors = sorted(v.iter_errors(self.json), key=lambda e: e.path)
         if len(errors) > 0:
             for error in errors:
-                logging.error(error.message)
+                logging.error("Json file: "+error.message)
         return

@@ -4,6 +4,7 @@ from ..library import Library
 from .UnpublishAnalysis import Unpublishanalysis
 from .validate_payload import Validatepayload
 from .get_analysis import Getanalysis
+from .upload_song_payload import Uploadsongpayload
 
 class Song(Library):
 
@@ -24,5 +25,6 @@ class Song(Library):
         return {
             'unpublish_analysis': Unpublishanalysis,
             'validate_payload': Validatepayload,
-            'get_analysis': Getanalysis
+            'get_analysis': Getanalysis,
+            'upload_payload': Uploadsongpayload
         }

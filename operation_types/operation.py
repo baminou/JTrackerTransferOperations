@@ -148,6 +148,7 @@ class Operation(Documentable):
     @classmethod
     def install(cls):
         requirements = os.path.dirname(inspect.getfile(cls))+"/requirements.txt"
+        print(cls)
         if os.path.isfile(requirements):
             os.system('pip3 install -r %s' % requirements)
 
