@@ -4,6 +4,7 @@ from operation_types.operation import Operation
 import shutil
 import os
 from ..utils import library_create, library_path
+from termcolor import cprint
 
 class MakeOperation(Operation):
 
@@ -43,6 +44,10 @@ class MakeOperation(Operation):
 
         with open(new_init_path,'w') as f:
             f.write(new_text)
+
+        cprint("Operation successfully created under: %s" % new_init_path,'green')
+        return True
+
 
     @staticmethod
     def to_camel_case(snake_str):
