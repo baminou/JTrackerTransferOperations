@@ -83,28 +83,28 @@ def get_all_jtracker_egafids(hosts, dirs):
                 jtracker_fids = jtracker_fids + get_etcd_jtracker_egafids(host.get('url'),queue.get('user'),queue.get('id'),state)
     return jtracker_fids
 
-def get_files_to_stage(egafids, tsv_file, fileType):
+def get_files_to_stage(egafids, tsv_file, entityType):
     keys = []
     result = []
     
     if not os.path.isfile(tsv_file):
         raise FileNotFoundError(tsv_file)
     logging.info("Retrieve EGAFIDs from audit report to stage: %s" % (tsv_file))
-    if fileType == 'analysis':
+    if entityType == 'analysis':
        keys = ['project_code','submitter_sample_id','ega_sample_id','ega_analysis_id','file_name','ega_file_id',
             'encrypted_file_md5sum','file_md5sum','dataset_id','file_size']
-    elif fileType == 'run':
+    elif entityType == 'run':
        keys = ['project_code','submitter_sample_id','ega_sample_id','ega_experiment_id','ega_run_id','file_name','ega_file_id',
            'encrypted_file_md5sum','file_md5sum','dataset_id','file_size']
        
     for fid in egafids:
-        if fileType == 'run':
+        if entityType == 'run':
 
            values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
                                                        "ICGC Submitted Sample ID","EGA Sample Accession","EGA Experiment Accession",
                                                        "EGA Run Accession","EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
                                                        "Unencrypted Checksum","EGA Dataset Accession","File Size")
-        elif fileType == 'analysis':
+        elif entityType == 'analysis':
            values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
                                                        "ICGC Submitted Sample ID","EGA Sample Accession","EGA Analysis Accession",
                                                        "EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
