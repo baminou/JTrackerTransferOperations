@@ -3,6 +3,7 @@
 from ..library import Library
 from .make_library import Makelibrary
 from .make_operation import MakeOperation
+from .make_operationtype import MakeOperationType
 from .list_operation import Listoperation
 from .yaml_to_json import Yamltojson
 from .publish import Publish
@@ -25,6 +26,7 @@ class Base(Library):
         return {
             'make:library': Makelibrary,
             'make:operation': MakeOperation,
+            'make:operation:type': MakeOperationType,
             'list:operations': Listoperation,
             'yaml_to_json': Yamltojson,
             'publish': Publish,
