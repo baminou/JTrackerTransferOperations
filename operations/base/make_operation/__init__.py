@@ -30,7 +30,7 @@ class MakeOperation(Operation):
         operation = self.args.operation
         operation_path = os.path.join(library_path(library),operation)
 
-        template_path = os.path.join(os.getcwd(),'templates','operation')
+        template_path = os.path.join(os.path.dirname(os.path.relpath(__file__)),'resources','template')
         new_init_path = os.path.join(operation_path,'__init__.py')
 
         library_create(library)
