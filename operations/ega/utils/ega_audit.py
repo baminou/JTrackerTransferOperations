@@ -95,7 +95,7 @@ class EGAAudit:
             file = {}
             file['ega_file_id'] = row[EGAF_ACCESSION_KEY]
             file['file_md5sum'] = row['Unencrypted Checksum']
-            file['file_name'] = row['Unencrypted Checksum']+'.'+os.path.basename(row['EGA Raw Sequence Filename'].replace('.gpg',''))
+            file['file_name'] = row['Unencrypted Checksum']+'.'+os.path.basename(row['EGA Raw Sequence Filename'].replace('.gpg','') if str(row['EGA Raw Sequence Filename']).endswith('.gpg') else row['EGA Raw Sequence Filename'])
             file['size'] = row['File Size']
             job['files'].append(file)
 
