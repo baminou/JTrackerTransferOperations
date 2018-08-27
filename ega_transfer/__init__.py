@@ -5,6 +5,7 @@ from entities.ega import EGA
 from operations.ega.utils.etcd_jtracker import ETCDJTracker
 from operations.ega.utils.github_jtracker import GithubJTracker
 import os
+from collections import OrderedDict
 
 def get_jtracker_fids(jtracker_instance,state=None):
     """
@@ -82,20 +83,34 @@ def get_all_jtracker_egafids(hosts, dirs):
                 jtracker_fids = jtracker_fids + get_etcd_jtracker_egafids(host.get('url'),queue.get('user'),queue.get('id'),state)
     return jtracker_fids
 
-def get_files_to_stage(egafids, tsv_file):
+def get_files_to_stage(egafids, tsv_file, entityType):
+    keys = []
+    result = []
+    
     if not os.path.isfile(tsv_file):
         raise FileNotFoundError(tsv_file)
     logging.info("Retrieve EGAFIDs from audit report to stage: %s" % (tsv_file))
-    keys = ['project_code','submitter_sample_id','ega_sample_id','ega_experiment_id','ega_run_id','file_name','ega_file_id',
-            'encrypted_file_md5sum','file_md5sum','dataset_id','file_size','ega_analysis_accession']
-
-    result = []
+    if entityType == 'analysis':
+       keys = ['project_code','submitter_sample_id','ega_sample_id','ega_analysis_id','file_name','ega_file_id',
+            'encrypted_file_md5sum','file_md5sum','dataset_id','file_size']
+    elif entityType == 'run':
+       keys = ['project_code','submitter_sample_id','ega_sample_id','ega_experiment_id','ega_run_id','file_name','ega_file_id',
+           'encrypted_file_md5sum','file_md5sum','dataset_id','file_size']
+       
     for fid in egafids:
-        values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
+        if entityType == 'run':
+
+           values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
                                                        "ICGC Submitted Sample ID","EGA Sample Accession","EGA Experiment Accession",
                                                        "EGA Run Accession","EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
-                                                       "Unencrypted Checksum","EGA Dataset Accession","File Size","EGA Analysis Accession")
-        result.append(dict(zip(keys,values)))
+                                                       "Unencrypted Checksum","EGA Dataset Accession","File Size")
+        elif entityType == 'analysis':
+           values = EGAAudit(tsv_file).get_info_from_egafid(fid,"ICGC DCC Project Code",
+                                                       "ICGC Submitted Sample ID","EGA Sample Accession","EGA Analysis Accession",
+                                                       "EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
+                                                       "Unencrypted Checksum","EGA Dataset Accession","File Size")
+        
+        result.append(OrderedDict(zip(keys,values)))
         logging.debug(values)
     logging.info("To stage informations retrieved")
     return result
