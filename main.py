@@ -16,7 +16,7 @@ def main():
         for command, operation in library.operations().items():
             operation_subparser = library_subparsers.add_parser(command, description=operation.description())
             operation.parser(operation_subparser)
-            operation_subparser.set_defaults(function=operation.run)
+            operation_subparser.set_defaults(function=operation.execute)
 
     results = parser.parse_args()
     results.function(results)

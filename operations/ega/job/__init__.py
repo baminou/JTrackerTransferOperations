@@ -3,7 +3,6 @@ import json
 import ega_transfer
 import os
 from operation_types.yml_config_operation import YmlConfigOperation
-import argparse
 
 class Job(YmlConfigOperation):
 

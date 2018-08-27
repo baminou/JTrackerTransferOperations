@@ -7,46 +7,57 @@ from operations.documentable import Documentable
 import os
 import multiprocessing
 import threading
-import time
 import inspect
+import time
 
 class Operation(Documentable):
     """This abstract class is the mother class for operations. An operation is a specific action on a JTracker workflow.
     Two methods have to be implemented for childen classes.
     _schema and _run"""
 
-    def __init__(self, on_running_timer=2):
-        self.__operation_state = multiprocessing.Manager().dict({'state': 'running'})
-        self._on_running_timer = on_running_timer
+    def __init__(self):
         self.args = None
         self.output = None
-        return
-
-    @property
-    def operation_state(self):
-        return self.__operation_state
-
-    def set_state(self, state):
-        self.__operation_state['state'] = state
+        self.main_thread = None
         return
 
     def set_args(self, args):
+        """
+        Set the arguments required by the operation available at the operation entry with argparse.
+
+        Args:
+            args (dict): Dictionary of required arguments to run the operation
+        """
         self.args = args
         return
 
     def get_args(self):
+        """
+        Return the args provided at the entry of the operation
+
+        Return:
+            dict: Arguments
+        """
         return self.args
 
     def set_output(self, output):
+        """
+        Set the output attribute
+
+        Args:
+            output: The available output at the end of the operation
+        """
         self.output = output
         return
 
     def get_output(self):
-        return self.output
+        """
+        Return the output attribute
 
-    @property
-    def on_running_timer(self):
-        return self._on_running_timer
+        Return:
+            The output value
+        """
+        return self.output
 
     @abstractmethod
     def _schema(self):
@@ -72,11 +83,12 @@ class Operation(Documentable):
         raise NotImplementedError
 
     @classmethod
-    def run(cls, args):
+    def execute(cls, args):
         """
-        Main method to run. This method contains the loading+validation of the config file and the _run method
-        :param args: 
-        :return: 
+        This method is the main one executed. It triggers all the hooks, before_start, on_running, on_error, on_completed.
+
+        Args:
+            args (dict): The required arguments to run the operation
         """
         obj = cls()
         obj.set_args(args)
@@ -84,21 +96,22 @@ class Operation(Documentable):
         run = obj.before_start()
 
         if run:
-            p1 = multiprocessing.Process(name="main",target=obj._run_wrapper, args=(obj.operation_state, ))
-            p2 = multiprocessing.Process(name="timer",target=obj.on_running, args=(obj.operation_state, ))
-            p1.start()
-            p2.start()
-            p1.join()
-            p2.join()
-
+            obj.main_thread = threading.Thread(target=obj.run)
+            obj.main_thread.start()
+            while obj.main_thread.is_alive():
+                obj.on_running()
+                time.sleep(obj.args.TIMER)
             obj.on_completed()
-
         return
 
-    def _run_wrapper(self, operation_state):
-        self.set_output(self._run())
-        self.set_state('on_completion')
+    def run(self):
+        ""
+        try:
+            self.set_output(self._run())
+        except Exception as err:
+            self.on_error(err)
         return
+
 
     @classmethod
     def parser(cls, main_parser):
@@ -109,8 +122,8 @@ class Operation(Documentable):
         obj._parser(main_parser)
         return
 
-    @abstractmethod
     def _parser(self, main_parser):
+        main_parser.add_argument('--TIMER',default=1, help="Interval seconds for on_running method")
         return
 
     @staticmethod
@@ -121,34 +134,81 @@ class Operation(Documentable):
             return {'required': True}
 
     def before_start(self):
-        result = self._before_start()
-        self.operation_state['state'] = 'running'
-        return result
+        """
+        This method is triggered right before executing the run. At this point, the arguments are already accessible
+        in the class. This is the perfection function to establish some rules before running the operation. If those rules are
+        not respected, return False and the operation is not going to be run. This method should not be overriden.
+
+        Return:
+            bool: False if the operation cannot be run, True otherwhise
+        """
+        return self._before_start()
 
     def _before_start(self):
+        """
+        This method is wrapped under before_start method to be overriden. This method contains the specific logic of an operation.
+        Return:
+            bool: False if the operation cannot be run, True otherwhise
+        """
         return True
 
     def on_completed(self):
-        self._on_completed()
-        self.operation_state['state'] = 'completed'
-        return
+        """
+        Once the operation is done, this hook is ran. This method should not be overriden.
+        Return:
+            bool: True if everything was done successfully, False otherwise
+        """
+        return  self._on_completed()
 
     def _on_completed(self):
-        return
+        """
+        This method is wrapped under on_completed to be overriden. This method contains the specific logic for an operation
+        Return:
+            bool: True if everything was done successfully, False otherwise
+        """
+        return True
 
-    def on_running(self, d):
-        if self.operation_state['state'] == 'running':
-            self._on_running()
-            threading.Timer(self.on_running_timer, self.on_running,args=[d]).start()
-            self.operation_state['state'] = 'running'
+    def on_running(self):
+        """
+        While the operation is running, this method is triggerred. In orther to change the invterval in second, this method is executed,
+        the user can provide --TIMER {time_in_second}. This operation should not be overriden
+        Return:
+            bool: True if the operation should keep running, False otherwise
+        """
+        return self._on_running()
 
     def _on_running(self):
-        return
+        """
+        This method is wrapped under on_running method to be overriden. This method contains the specific logic on an operation
+        Return:
+            bool: True if the operation should keep running, False otherwise
+        """
+        return True
+
+    def on_error(self, exception):
+        """
+        This method is triggered in case of an exception. This method should not be overriden.
+
+        Parms:
+            exception: The exception raised by the operation
+        """
+        return self._on_error(exception)
+
+    def _on_error(self, exception):
+        """
+        This method is wrapped under on_error to be overriden. This method contains the specific logic for an operaion in case of an error.
+
+        Raises:
+            The operation exception raised by the operation while running.
+        """
+        raise Exception
 
     @classmethod
     def install(cls):
+        """
+        Install everything required to run the operation. This method should not be overriden.
+        """
         requirements = os.path.dirname(inspect.getfile(cls))+"/requirements.txt"
-        print(cls)
         if os.path.isfile(requirements):
             os.system('pip3 install -r %s' % requirements)
-
+        return
