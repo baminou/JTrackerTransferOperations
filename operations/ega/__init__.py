@@ -8,6 +8,7 @@ from .to_delete import ToDelete
 from .runnable import Runnable
 from .is_alive import Isalive
 from .sync_files import SyncFiles
+from .to_stage_status import Tostagestatus
 
 class EGA(Library):
 
@@ -32,5 +33,6 @@ class EGA(Library):
             'to_delete': ToDelete,
             'runnable': Runnable,
             'is_alive': Isalive,
-            'sync': SyncFiles
+            'sync': SyncFiles,
+            'to_stage:status': Tostagestatus
         }
