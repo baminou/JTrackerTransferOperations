@@ -9,6 +9,7 @@ from .runnable import Runnable
 from .is_alive import Isalive
 from .sync_files import SyncFiles
 from .to_stage_status import Tostagestatus
+from .report import Report
 
 class EGA(Library):
 
@@ -34,5 +35,6 @@ class EGA(Library):
             'runnable': Runnable,
             'is_alive': Isalive,
             'sync': SyncFiles,
-            'to_stage:status': Tostagestatus
+            'to_stage:status': Tostagestatus,
+            'report': Report
         }
