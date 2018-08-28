@@ -27,11 +27,10 @@ class Tostagestatus(Operation):
         reader = csv.DictReader(self.args.to_stage_tsv, delimiter='\t')
         ega_box_fids = ega_transfer.get_ega_box_fids(self.args.aspera_server,self.args.aspera_user)
 
-        next(reader)
         for row in reader:
-            file_size = row.get('File Size')
-            type = row.get('ICGC Submitted Sequencing Strategy')
-            egafid = row.get('EGA File Accession')
+            file_size = row.get('file_size')
+            study = row.get('project_code')
+            egafid = row.get('ega_file_id')
             missed_cpt = 0
             state = None
             col = None
@@ -43,6 +42,6 @@ class Tostagestatus(Operation):
                 col = "red"
                 missed_cpt = missed_cpt + 1
 
-            print(egafid+"\t"+file_size+"\t"+"\t"+type+"\t"+colored(state, col))
+            print(egafid+"\t"+file_size+"\t"+"\t"+study+"\t"+colored(state, col))
         print("### "+str(missed_cpt)+" EGAFIDs are not staged")
 
