@@ -1,14 +1,9 @@
 
-import logging
-import yaml
 from abc import abstractmethod
-from jsonschema import Draft4Validator
 from operations.documentable import Documentable
 import os
-import multiprocessing
-import threading
 import inspect
-import time
+import threading
 
 class Operation(Documentable):
     """This abstract class is the mother class for operations. An operation is a specific action on a JTracker workflow.
@@ -19,6 +14,7 @@ class Operation(Documentable):
         self.args = None
         self.output = None
         self.main_thread = None
+        self.completed = False
         return
 
     def set_args(self, args):
@@ -94,13 +90,9 @@ class Operation(Documentable):
         obj.set_args(args)
 
         run = obj.before_start()
-
         if run:
-            obj.main_thread = threading.Thread(target=obj.run)
-            obj.main_thread.start()
-            while obj.main_thread.is_alive():
-                obj.on_running()
-                time.sleep(obj.args.TIMER)
+            obj.on_running()
+            obj.run()
             obj.on_completed()
         return
 
@@ -108,8 +100,10 @@ class Operation(Documentable):
         ""
         try:
             self.set_output(self._run())
+            self.completed = True
         except Exception as err:
             self.on_error(err)
+            self.completed = True
         return
 
 
@@ -175,6 +169,8 @@ class Operation(Documentable):
         Return:
             bool: True if the operation should keep running, False otherwise
         """
+        if not self.completed:
+            threading.Timer(1, self.on_running).start()
         return self._on_running()
 
     def _on_running(self):
