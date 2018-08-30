@@ -70,7 +70,7 @@ class EGAAudit:
         job['bundle_id'] = self._get_bundle_id(rows[0]['EGA Analysis Accession'],rows[0]['EGA Run Accession'])
         job['name'] = job['bundle_id']
         job['bundle_type'] = self._get_bundle_type(rows[0]['EGA Analysis Accession'],rows[0]['EGA Run Accession'])
-        job['donor_gender'] = rows[0] if rows[0]["Donor Gender"] in ['male','female'] else 'unspecified'
+        job['donor_gender'] = rows[0]["Donor Gender"] if rows[0]["Donor Gender"] in ['male','female'] else 'unspecified'
         job['ega_analysis_id'] = rows[0]['EGA Analysis Accession']
         job['ega_dataset_id'] = rows[0]["EGA Dataset Accession"]
         job['ega_experiment_id'] = rows[0]["EGA Experiment Accession"]
