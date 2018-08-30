@@ -10,6 +10,7 @@ from .is_alive import Isalive
 from .sync_files import SyncFiles
 from .to_stage_status import Tostagestatus
 from .report import Report
+from .job_validate import Jobvalidate
 
 class EGA(Library):
 
@@ -36,5 +37,6 @@ class EGA(Library):
             'is_alive': Isalive,
             'sync': SyncFiles,
             'to_stage:status': Tostagestatus,
-            'report': Report
+            'report': Report,
+            'job:validate': Jobvalidate
         }

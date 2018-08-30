@@ -1,0 +1,45 @@
+
+import jsonschema
+
+def ega_job_schema():
+    return {
+        "properties":{
+            'bundle_id' : {'type': 'string'},
+            'bundle_type': {'enum': ['run','experiment']},
+            "donor_gender": {"enum": ['male','female','unspecified']},
+            'ega_analysis_id': {'type':'string'},
+            'ega_dataset_id': {"type": "string"},
+            "ega_experiment_id": {"type": "string"},
+            "ega_metadata_file_name": {"type":"string"},
+            "ega_metadata_repo": {"type":"string"},
+            "ega_run_id": {"type": "string"},
+            "ega_sample_id": {"type": "string"},
+            "ega_study_id": {"type": "string"},
+            "files": {
+                "type": "array",
+                "properties": {
+                    "ega_file_id": {"type":"string"},
+                    "file_md5sum": {"type": "string"},
+                    "file_name": {"type":"string"},
+                    "size": {"type":"string"}
+                }
+            },
+            "insert_size": {"type":"string"},
+            "library_strategy": {"type":"string"},
+            "name": {"type":"string"},
+            "paired_end": {"type":"string"},
+            "project_code": {"type":"string"},
+            "reference_genome": {"type":"string"},
+            "submitter": {"type":"string"},
+            "submitter_donor_id": {"type":"string"},
+            "submitter_sample_id": {"type":"string"},
+            "submitter_specimen_id": {"type":"string"},
+            "submitter_specimen_type": {"type":"string"}
+        }
+    }
+
+def validate_ega_job_schema(job_json):
+    try:
+        jsonschema.validate(job_json,ega_job_schema())
+    except jsonschema.exceptions.ValidationError as err:
+        return str(err.relative_path[0])+"\t"+err.validator+"\t"+str(err.validator_value)
