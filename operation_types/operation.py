@@ -102,8 +102,8 @@ class Operation(Documentable):
             self.set_output(self._run())
             self.completed = True
         except Exception as err:
-            self.on_error(err)
             self.completed = True
+            self.on_error(err)
         return
 
 

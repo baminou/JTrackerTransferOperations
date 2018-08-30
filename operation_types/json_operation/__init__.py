@@ -15,11 +15,14 @@ class JsonOperation(Operation):
 
     def _parser(self, main_parser):
         main_parser.add_argument('json', help="Json input file", type=FileType('r'))
+        main_parser.add_argument('--skip-validate', dest='skip_validate',help="Skip the json validation", action='store_true')
         return main_parser
 
     def _before_start(self):
         super(JsonOperation, self)._before_start()
         self.json = json.load(self.args.json)
+        if not self.args.skip_validate:
+            self.__validate_json()
         return True
 
     def __validate_json(self):
