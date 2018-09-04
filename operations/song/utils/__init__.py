@@ -4,7 +4,7 @@ import requests
 from jsonschema import validate, Draft4Validator
 import json
 from deepdiff import DeepDiff, DeepSearch
-import operator
+import copy
 
 
 def is_alive(song_server):
@@ -74,18 +74,35 @@ def upload_payload(song_server, study_id, analysis_id, payload,token, ignore_ana
         raise Exception("The payload %s/%s could not be uploaded." % (study_id, analysis_id))
 
 def analysis_is_same_as_json(analysis, payload):
-    del analysis['analysisState']
-    del analysis['experiment']['info']
+    new_analysis = copy.deepcopy(analysis)
+    del new_analysis['analysisState']
+    del new_analysis['experiment']['info']
 
     for i in range(0, len(analysis.get('sample'))):
-        del analysis.get('sample')[0]['info']
-        del analysis.get('sample')[0]['specimen']['info']
-        del analysis.get('sample')[0]['donor']['info']
+        del new_analysis.get('sample')[0]['info']
+        del new_analysis.get('sample')[0]['specimen']['info']
+        del new_analysis.get('sample')[0]['donor']['info']
 
     for i in range(0,len(analysis.get('file'))):
-        del analysis.get('file')[i]['info']
-        del analysis.get('file')[i]['studyId']
-        del analysis.get('file')[i]['analysisId']
-        del analysis.get('file')[i]['objectId']
-    return DeepDiff(analysis.get('file'),payload.get('file'), ignore_order=True) == {}
+        del new_analysis.get('file')[i]['info']
+        del new_analysis.get('file')[i]['studyId']
+        del new_analysis.get('file')[i]['analysisId']
+        del new_analysis.get('file')[i]['objectId']
+    return DeepDiff(new_analysis.get('file'),payload.get('file'), ignore_order=True) == {}
 
+def update_analysis_file(song_server, study_id, file_id, file_json, token):
+    headers = {'Authorization':'Bearer '+token}
+    response = requests.put('%s/studies/%s/files/%s' % (song_server, study_id, file_id), json=file_json, headers=headers)
+    if not response.status_code == 200:
+        raise Exception(json.loads(response.text).get('message'))
+
+def retrieve_object_id(song_server, study_id, analysis_id, file_name):
+    files = get_files(song_server,study_id, analysis_id)
+    for i in range(0,len(files)):
+        if files[i].get('fileName') == file_name:
+            return files[i].get('objectId')
+    raise Exception("The file %s could not be found in the song payload." % (file_name))
+
+def add_to_manifest(song_server, study_id, analysis_id, file_name, file_md5, fp):
+    object_id = retrieve_object_id(song_server,study_id, analysis_id, file_name)
+    fp.write(object_id+"\t"+file_name+"\t"+file_md5+"\n")

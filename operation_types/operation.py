@@ -15,6 +15,7 @@ class Operation(Documentable):
         self.output = None
         self.main_thread = None
         self.completed = False
+        self.unknown_args = None
         return
 
     def set_args(self, args):
@@ -26,6 +27,9 @@ class Operation(Documentable):
         """
         self.args = args
         return
+
+    def set_unknown_args(self, args):
+        self.unknown_args = args
 
     def get_args(self):
         """
@@ -79,7 +83,7 @@ class Operation(Documentable):
         raise NotImplementedError
 
     @classmethod
-    def execute(cls, args):
+    def execute(cls, args, unknown_args):
         """
         This method is the main one executed. It triggers all the hooks, before_start, on_running, on_error, on_completed.
 
@@ -88,6 +92,7 @@ class Operation(Documentable):
         """
         obj = cls()
         obj.set_args(args)
+        obj.set_unknown_args(unknown_args)
 
         run = obj.before_start()
         if run:

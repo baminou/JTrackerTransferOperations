@@ -9,6 +9,7 @@ from .yaml_to_json import Yamltojson
 from .publish import Publish
 from .install_operation import Installoperation
 from .install import Install
+from .command import Command
 
 class Base(Library):
 
@@ -30,5 +31,6 @@ class Base(Library):
             'yaml_to_json': Yamltojson,
             'publish': Publish,
             'install:operation': Installoperation,
-            'install': Install
+            'install': Install,
+            'command': Command
         }
