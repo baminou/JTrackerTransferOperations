@@ -63,6 +63,13 @@ class EGAAudit:
                 rows.append(row)
         return rows
 
+    def find_rows_with_bundle_id(self, bundle_id):
+        rows = []
+        for row in self._rows:
+            if row['EGA Analysis Accession'] == bundle_id or row['EGA Run Accession'] == bundle_id:
+                rows.append(row)
+        return rows
+
     def get_job(self, egaf_id, metadata_repo):
         job = {}
         rows = self.find_rows(egaf_id)
@@ -91,7 +98,7 @@ class EGAAudit:
         job['submitter_specimen_type'] = rows[0]["ICGC Submitted Specimen Type"]
 
         job['files'] = []
-        for row in rows:
+        for row in self.find_rows_with_bundle_id(job['bundle_id']):
             file = {}
             file['ega_file_id'] = row[EGAF_ACCESSION_KEY]
             file['file_md5sum'] = row['Unencrypted Checksum']
