@@ -1,6 +1,7 @@
 
 from operations.library import Library
 from .upload import Upload
+from .download import Download
 
 class ICGC(Library):
 
@@ -15,5 +16,6 @@ class ICGC(Library):
     @staticmethod
     def operations():
         return {
-            'upload': Upload
+            'upload': Upload,
+            'download': Download
         }
