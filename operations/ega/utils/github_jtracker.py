@@ -19,12 +19,10 @@ class GithubJTracker(JTracker):
 
     def _load_repositories(self):
         for repo in self._repositories:
-            logging.debug("Loading jobs from %s" % (repo))
             if not self.validate_folder(repo):
                 raise Exception("The repo is not a valid jtracker repository: " + repo)
 
             for state in STATES:
-                logging.debug("Loading jobs from %s : state %s" % (repo,state))
                 for job_path in self._list_jobs_in_repo(os.path.join(repo,"job_state."+state)):
                     with open(job_path, 'r') as fp:
                         self._jobs[job_path] = json.load(fp)
@@ -55,6 +53,5 @@ class GithubJTracker(JTracker):
         jobs = []
         for root, dirnames, filenames in os.walk(repo):
             for filenames in fnmatch.filter(filenames, 'job.*.json'):
-                logging.debug("Adding file: %s" %(os.path.join(root,filenames)))
                 jobs.append(os.path.join(root,filenames))
         return jobs
