@@ -1,6 +1,5 @@
 
-from operation_types.operation import Operation
-from operations.library import Library
+from kernel.operation import Operation
 import subprocess
 
 class Install(Operation):

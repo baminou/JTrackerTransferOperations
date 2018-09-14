@@ -1,5 +1,5 @@
 
-from operations.library import Library
+from kernel.library import Library
 
 class LIBRARYNAME(Library):
 

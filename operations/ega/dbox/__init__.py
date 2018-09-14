@@ -1,4 +1,4 @@
-from operation_types.operation import Operation
+from kernel.operation import Operation
 from entities.ega import EGA
 
 class Dbox(Operation):

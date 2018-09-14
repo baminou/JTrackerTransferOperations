@@ -1,6 +1,6 @@
 
 
-from ..library import Library
+from kernel.library import Library
 from .make_library import Makelibrary
 from .make_operation import MakeOperation
 from .make_operationtype import MakeOperationType

@@ -1,5 +1,5 @@
 
-from operation_types.operation import Operation
+from kernel.operation import Operation
 from ..utils.github_jtracker import GithubJTracker
 from ega_transfer import get_jtracker_fids
 class Oldfids(Operation):

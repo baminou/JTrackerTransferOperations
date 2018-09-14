@@ -1,6 +1,6 @@
 
 from abc import abstractmethod
-from operations.documentable import Documentable
+from kernel.documentable import Documentable
 import os
 import inspect
 import threading

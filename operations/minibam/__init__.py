@@ -1,5 +1,5 @@
 
-from ..library import Library
+from kernel.library import Library
 from .sync_files import SyncFiles
 
 class Minibam(Library):

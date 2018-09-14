@@ -1,6 +1,6 @@
 
-from operation_types.operation import Operation
-from operations.library import Library
+from kernel.operation import Operation
+from kernel.library import Library
 import inspect
 from termcolor import colored
 import tabulate

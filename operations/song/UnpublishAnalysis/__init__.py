@@ -1,9 +1,8 @@
 
-from operation_types.operation import Operation
+from kernel.operation import Operation
 
-from ..utils import get_files, update_file
 from ..utils.SongAnalysis import SongAnalysis
-from prompt_toolkit.shortcuts import yes_no_dialog
+
 
 class Unpublishanalysis(Operation):
 

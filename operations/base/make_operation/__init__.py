@@ -1,6 +1,6 @@
 
 
-from operation_types.operation import Operation
+from kernel.operation import Operation
 import shutil
 import os
 from ..utils import library_create, library_path
