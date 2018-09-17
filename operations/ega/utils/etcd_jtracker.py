@@ -21,12 +21,16 @@ class ETCDJTracker(JTracker):
         return self._jobs
 
     def _load_jobs(self):
-        return requests.get(self._server+"/api/jt-jess/v0.1/jobs/owner/"+self._user+"/queue/"+self._queue).json()
+        url = self._server+"/api/jt-jess/v0.1/jobs/owner/"+self._user+"/queue/"+self._queue
+        return requests.get(url).json()
 
     def get_job_ids(self, state=None):
         ids = []
         for job in self._jobs:
-            if job.get('state') == state:
+            if not state == None:
+                if job.get('state') == state:
+                    ids.append(job.get('id'))
+            else:
                 ids.append(job.get('id'))
         return ids
 

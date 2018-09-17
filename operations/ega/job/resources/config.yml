@@ -12,4 +12,4 @@ old_jtracker:
 aspera_info:
   server: # The address of the EGA Aspera server
   user: # Ega Aspera server username
-metadata_repo: # The version of the xml audit: Eg. https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/v20180321
+metadata_repo: # The version of the xml audit: Eg. https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml
