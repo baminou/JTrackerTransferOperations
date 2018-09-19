@@ -1,6 +1,7 @@
 
 from kernel.library import Library
 from .sync_files import SyncFiles
+from .list_analysis_ids import Listanalysisids
 
 class Minibam(Library):
 
@@ -19,5 +20,6 @@ class Minibam(Library):
     @staticmethod
     def operations():
         return {
-            'sync': SyncFiles
+            'sync': SyncFiles,
+            'list:analysis': Listanalysisids
         }

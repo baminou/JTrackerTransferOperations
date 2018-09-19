@@ -1,0 +1,9 @@
+{
+  "exclude_projects": [],
+  "jtracker_host": {
+    "url": "",
+    "queues": [
+      {"user": "", "id": ""}
+    ]
+  }
+}
