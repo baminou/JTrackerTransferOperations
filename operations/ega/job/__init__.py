@@ -73,8 +73,8 @@ class Job(YmlConfigOperation):
 
         metadata_repo_url = self.args.metadata_repo+self.args.metadata_version
 
-        #if not yes_or_no("This metadata URL (%s) is going to be inserted in the generated jsons. Okay?" % (metadata_repo_url)):
-        #    return
+        if not yes_or_no("This metadata URL (%s) is going to be inserted in the generated jsons. Okay?" % (metadata_repo_url)):
+            return
 
         # Load all EGAFIDs from EGA aspera server
         ega_box_fids = ega_transfer.get_ega_box_fids(self.config.get('aspera_info').get('server'),self.config.get('aspera_info').get('user'))
