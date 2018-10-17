@@ -1,8 +1,7 @@
 
-from operation_types.operation import Operation
+from kernel.operation import Operation
 import csv
 import argparse
-import ast
 import ega_transfer
 from termcolor import colored
 

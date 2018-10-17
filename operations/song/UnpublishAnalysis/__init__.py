@@ -1,8 +1,8 @@
 
-from operation_types.operation import Operation
+from kernel.operation import Operation
 
-from ..utils import get_files, update_file
-from prompt_toolkit.shortcuts import yes_no_dialog
+from ..utils.SongAnalysis import SongAnalysis
+
 
 class Unpublishanalysis(Operation):
 
@@ -25,10 +25,6 @@ class Unpublishanalysis(Operation):
         return
 
     def _run(self):
-        server = self.args.server
-        study = self.args.study_id
-        analysis = self.args.analysis_id
-        token = self.args.token
 
         result = True
 
@@ -38,9 +34,5 @@ class Unpublishanalysis(Operation):
         #        text='This operation can make permanent changes to your SONG server in case of failure. Do you still want to continue?')
 
         if result:
-            original_file = get_files(server, study, analysis)[0]
-            original_md5 = original_file['fileMd5sum']
-            original_file['fileMd5sum'] = "a"*32
-            update_file(server, study, original_file['objectId'],token, original_file)
-            original_file['fileMd5sum'] = original_md5
-            update_file(server, study, original_file['objectId'],token, original_file)
+            analysis = SongAnalysis(self.args.server, self.args.study_id, self.args.analysis_id)
+            analysis.unpublish(self.args.token)

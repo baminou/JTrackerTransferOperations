@@ -71,13 +71,10 @@ def get_github_jtracker_egafids(dirs, state):
     jtracker = GithubJTracker(dirs)
     return get_jtracker_fids(jtracker,state)
 
-def get_all_jtracker_egafids(hosts, dirs):
+def get_all_jtracker_egafids(hosts, dirs, states=['completed', 'failed', 'backlog', 'running', 'resume', 'queued']):
     jtracker_fids = []
-    logging.debug("Loading EGAFIDs from JTracker")
-    for state in ['completed', 'failed', 'backlog', 'running', 'resume', 'queued']:
-        logging.debug("Loading from Github repo")
+    for state in states:
         jtracker_fids = jtracker_fids + get_github_jtracker_egafids(dirs, state)
-        logging.debug("Loading EGAFIDs with state: %s" % (state))
         for host in hosts:
             for queue in host.get('queues'):
                 jtracker_fids = jtracker_fids + get_etcd_jtracker_egafids(host.get('url'),queue.get('user'),queue.get('id'),state)

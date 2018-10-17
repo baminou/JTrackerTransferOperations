@@ -3,6 +3,7 @@ import json
 import ega_transfer
 import os
 from operation_types.yml_config_operation import YmlConfigOperation
+from ..utils import yes_or_no
 
 class Job(YmlConfigOperation):
 
@@ -15,8 +16,10 @@ class Job(YmlConfigOperation):
         return "Generate the job json files needed to run JTracker workflow"
 
     def _parser(self, main_parser):
-        main_parser.add_argument('-a', '--audit', dest='audit', required=True)
-        main_parser.add_argument('-o', '--output', dest='output_dir', required=True)
+        main_parser.add_argument('-a', '--audit', dest='audit', required=True, help="Path of the TSV file containing jobs that have to be generated.")
+        main_parser.add_argument('-m', '--metadata-version', dest='metadata_version', required=True, help="Version of the metada repo to use in the job jsons")
+        main_parser.add_argument('-r', '--metadata-repo', dest='metadata_repo', help="Metadata repository path without the version", required=False, default="https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/")
+        main_parser.add_argument('-o', '--output', dest='output_dir', help="Output directory where to put the json files.", required=True)
 
     def _config_schema(self):
         return {
@@ -62,11 +65,16 @@ class Job(YmlConfigOperation):
                     "user": {"type": "string"}
                 }
             },
-            "required": ["etcd_jtracker","old_jtracker","metadata_repo",'aspera_info']
+            "required": ["etcd_jtracker","old_jtracker",'aspera_info']
         }
 
 
     def _run(self):
+
+        metadata_repo_url = self.args.metadata_repo+self.args.metadata_version
+
+        if not yes_or_no("This metadata URL (%s) is going to be inserted in the generated jsons. Okay?" % (metadata_repo_url)):
+            return
 
         # Load all EGAFIDs from EGA aspera server
         ega_box_fids = ega_transfer.get_ega_box_fids(self.config.get('aspera_info').get('server'),self.config.get('aspera_info').get('user'))
@@ -81,7 +89,7 @@ class Job(YmlConfigOperation):
 
         for id in audit_fids:
             if id in ega_box_fids and id not in jtracker_fids:
-                job_name, job_data = EGAAudit(self.args.audit).get_job(id,self.config.get('metadata_repo'))
+                job_name, job_data = EGAAudit(self.args.audit).get_job(id,metadata_repo_url)
                 file_name = os.path.join(self.args.output_dir,job_name+".json")
                 with open(file_name, 'w') as fp:
                     json.dump(job_data,fp,indent=4,sort_keys=True)

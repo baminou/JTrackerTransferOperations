@@ -1,9 +1,7 @@
-
-from operation_types.operation import Operation
 import os
 import shutil
-from operations.library import Library
-from operation_types.operation import Operation
+from kernel.library import Library
+from kernel.operation import Operation
 import inspect
 
 class Publish(Operation):

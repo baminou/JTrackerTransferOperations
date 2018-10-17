@@ -1,5 +1,19 @@
 
 import jsonschema
+import requests
+
+def url_exists(url):
+    return not requests.get(url).status_code == 404
+
+def yes_or_no(question):
+    while 1:
+        res = input("%s (Enter y/n)" % (question)).lower()
+        if res == "y":
+            return True
+        if res == "n":
+            return False
+
+
 
 def ega_job_schema():
     return {

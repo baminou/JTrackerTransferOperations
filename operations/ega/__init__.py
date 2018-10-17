@@ -1,6 +1,6 @@
 
 
-from ..library import Library
+from kernel.library import Library
 from .job import Job
 from .dbox import Dbox
 from .to_stage import ToStage
@@ -10,6 +10,8 @@ from .is_alive import Isalive
 from .sync_files import SyncFiles
 from .to_stage_status import Tostagestatus
 from .report import Report
+from .old_fids import Oldfids
+from .new_fids import Newfids
 from .job_validate import Jobvalidate
 
 class EGA(Library):
@@ -38,5 +40,7 @@ class EGA(Library):
             'sync': SyncFiles,
             'to_stage:status': Tostagestatus,
             'report': Report,
+            'old:fids': Oldfids,
+            'new:fids': Newfids,
             'job:validate': Jobvalidate
         }

@@ -1,5 +1,5 @@
 
-from operation_types.operation import Operation
+from kernel.operation import Operation
 from ..utils import get_analysis
 import json
 

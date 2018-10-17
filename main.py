@@ -18,8 +18,8 @@ def main():
             operation.parser(operation_subparser)
             operation_subparser.set_defaults(function=operation.execute)
 
-    results = parser.parse_args()
-    results.function(results)
+    results, unknown_args = parser.parse_known_args()
+    results.function(results,unknown_args)
 
 if __name__ == "__main__":
     main()

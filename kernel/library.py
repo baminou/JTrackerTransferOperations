@@ -1,5 +1,5 @@
 
-from .documentable import Documentable
+from kernel.documentable import Documentable
 
 
 class Library(Documentable):

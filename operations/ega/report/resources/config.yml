@@ -1,1 +1,14 @@
-tsvs: # List of TSV files containing audit for projects
+aspera_info:
+  server: # Aspera EGA server
+  user: # Aspera ega user
+etcd_jtracker:
+  hosts:
+    -
+      url: # JTracker url with port
+      queues:
+        -
+          user: # JTracker username
+          id: # Queue id
+old_jtracker:
+  dirs:
+    - # Path of JTracker directory
