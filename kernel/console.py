@@ -4,6 +4,7 @@ from operations.ega import EGA
 from operations.song import Song
 from operations.minibam import Minibam
 from operations.icgc import ICGC
+from operations.jtracker import jtracker
 
 def libraries():
     return {
@@ -11,5 +12,6 @@ def libraries():
         EGA.name(): EGA,
         Song.name(): Song,
         Minibam.name(): Minibam,
-        ICGC.name(): ICGC
+        ICGC.name(): ICGC,
+        jtracker.name(): jtracker
     }
