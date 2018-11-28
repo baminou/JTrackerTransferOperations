@@ -13,6 +13,8 @@ from .report import Report
 from .old_fids import Oldfids
 from .new_fids import Newfids
 from .job_validate import Jobvalidate
+from .publish_state import Publishstate
+from .publish_states import Publishstates
 
 class EGA(Library):
 
@@ -42,5 +44,7 @@ class EGA(Library):
             'report': Report,
             'old:fids': Oldfids,
             'new:fids': Newfids,
-            'job:validate': Jobvalidate
+            'job:validate': Jobvalidate,
+            'publish:state': Publishstate,
+            'publish:states': Publishstates
         }
