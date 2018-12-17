@@ -1,0 +1,83 @@
+---
+- hosts: ega_transfer
+  become: true
+  vars_files:
+    - playbook_vars.yml
+  tasks:
+    - name: Install pip3
+      apt: name=python3-pip=8.1.1-2ubuntu0.4 state=present
+    - name: Install pip
+      apt: name=python-pip=8.1.1-2ubuntu0.4 state=present
+    - name: Install JTracker
+      command: pip3 install jtracker==0.2.0a28
+    - name: Install samtools
+      apt: name=samtools state=latest
+    - name: Install Song payload library
+      command: pip3 install git+https://github.com/baminou/overture-song-payload.git@0.0.1#egg=overture_song_payload
+    - name: Add Docker GPG key
+      apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    - name: Install list of packages
+      apt:
+        name: ['apt-transport-https','ca-certificates','curl','software-properties-common','docker-ce']
+        state: present
+        update_cache: yes
+
+
+    - name: Install cwltool
+      command: pip install cwltool==1.0.20180116213856
+    - name: Install R
+      apt: name=r-base-core state=latest
+
+    - name: Install add-apt-repostory
+      apt: name=software-properties-common state=latest
+    - name: Add Oracle Java Repository
+      apt_repository: repo='ppa:webupd8team/java'
+    - name: Select button oracle licence
+      command: bash -c "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections"
+
+    - name: Press ok oracle licence
+      command: bash -c "echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections"
+
+    - name: Install Oracle Java 8
+      apt: name={{item}} state=latest
+      with_items:
+        - oracle-java8-installer
+        - ca-certificates
+        - oracle-java8-set-default
+
+    - name: Unarchive Score client
+      unarchive:
+        src: https://artifacts.oicr.on.ca/artifactory/dcc-release/bio/overture/score-client/1.5.0/score-client-1.5.0-dist.tar.gz
+        dest: /home/ubuntu
+        remote_src: yes
+
+    - name: Add Score to path
+      lineinfile: dest=/home/ubuntu/.bashrc line='export PATH=$PATH:/home/ubuntu/score-client-1.5.0/bin'
+
+    - name: Add .jtconfig
+      shell: |
+        echo "jt_account: "{{JT_USER}} >> /home/ubuntu/.jtconfig
+        echo "ams_server: "{{JT_SERVER}}"/api/jt-ams/v0.1" >> /home/ubuntu/.jtconfig
+        echo "wrs_server: "{{JT_SERVER}}"/api/jt-wrs/v0.1" >> /home/ubuntu/.jtconfig
+        echo "jess_server: {{JT_SERVER}}/api/jt-jess/v0.1" >> /home/ubuntu/.jtconfig
+
+    - name: Add access tokens
+      shell: |
+        echo "export ACCESSTOKEN="{{ACCESSTOKEN}} >> /home/ubuntu/.bashrc
+        echo "export ASCP_EGA_HOST="{{ASCP_EGA_HOST}} >> /home/ubuntu/.bashrc
+        echo "export ASCP_EGA_USER="{{ASCP_EGA_USER}} >> /home/ubuntu/.bashrc
+        echo "export ASPERA_SCP_PASS="{{ASPERA_SCP_PASS}} >> /home/ubuntu/.bashrc
+        echo "export EGA_DCK_KEY="{{EGA_DCK_KEY}} >> /home/ubuntu/.bashrc
+        echo "export STORAGEURL_COLLAB="{{STORAGEURL_COLLAB}} >> /home/ubuntu/.bashrc
+        echo "export METADATAURL_COLLAB="{{METADATAURL_COLLAB}} >> /home/ubuntu/.bashrc
+        echo "export STORAGEURL_AWS="{{STORAGEURL_AWS}} >> /home/ubuntu/.bashrc
+        echo "export METADATAURL_AWS="{{METADATAURL_AWS}} >> /home/ubuntu/.bashrc
+        echo "export SONG_SERVER_COLLAB="{{SONG_SERVER_COLLAB}} >> /home/ubuntu/.bashrc
+        echo "export SONG_SERVER_AWS="{{SONG_SERVER_AWS}} >> /home/ubuntu/.bashrc
+        echo "export AWS_ACCESS_KEY_ID="{{AWS_ACCESS_KEY_ID}} >> /home/ubuntu/.bashrc
+        echo "export AWS_SECRET_ACCESS_KEY="{{AWS_SECRET_ACCESS_KEY}} >> /home/ubuntu/.bashrc
+        echo "export COLLAB_ACCESS_KEY_ID="{{COLLAB_ACCESS_KEY_ID}} >> /home/ubuntu/.bashrc
+        echo "export COLLAB_SECRET_ACCESS_KEY="{{COLLAB_SECRET_ACCESS_KEY}} >> /home/ubuntu/.bashrc
