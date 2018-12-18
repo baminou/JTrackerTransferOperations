@@ -18,7 +18,7 @@ class Job(YmlConfigOperation):
     def _parser(self, main_parser):
         main_parser.add_argument('-a', '--audit', dest='audit', required=True, help="Path of the TSV file containing jobs that have to be generated.")
         main_parser.add_argument('-m', '--metadata-version', dest='metadata_version', required=True, help="Version of the metada repo to use in the job jsons")
-        main_parser.add_argument('-r', '--metadata-repo', dest='metadata_repo', help="Metadata repository path without the version", required=False, default="https://raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/")
+        main_parser.add_argument('-r', '--metadata-repo', dest='metadata_repo', help="Metadata repository path without the version", required=False, default="raw.githubusercontent.com/icgc-dcc/ega-file-transfer/master/ega_xml/")
         main_parser.add_argument('-o', '--output', dest='output_dir', help="Output directory where to put the json files.", required=True)
 
     def _config_schema(self):
