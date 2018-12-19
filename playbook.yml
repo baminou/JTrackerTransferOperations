@@ -17,6 +17,8 @@
       apt: name=samtools state=latest
     - name: Install Song payload library
       command: pip3 install git+https://github.com/baminou/overture-song-payload.git@0.0.1#egg=overture_song_payload
+    - name: Install jsonschema
+      command: pip3 install jsonschema==2.6.0
     - name: Add Docker GPG key
       apt_key: url=https://download.docker.com/linux/ubuntu/gpg
     - name: Add Docker APT repository
