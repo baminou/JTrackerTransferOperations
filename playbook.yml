@@ -1,10 +1,12 @@
 ---
 - hosts: ega_transfer
-  become: true
-  vars_files:
-    - playbook_vars.yml
+  gather_facts: yes
+  pre_tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y install python
   tasks:
     - name: apt-get update
+      become: yes
       apt:
         update_cache: yes
     - name: Install pip3
@@ -20,6 +22,7 @@
     - name: Install jsonschema
       command: pip3 install jsonschema==2.6.0
     - name: Add Docker GPG key
+      become: true
       apt_key: url=https://download.docker.com/linux/ubuntu/gpg
     - name: Add Docker APT repository
       apt_repository:
@@ -27,9 +30,10 @@
     - name: Install list of packages
       apt:
         name: ['apt-transport-https','ca-certificates','curl','software-properties-common','docker-ce']
-        state: present
-        update_cache: yes
+        #state: present
+        #update_cache: yes
     - name: Change user rights for docker
+      become: true
       command: usermod -aG docker ubuntu
 
 
@@ -64,27 +68,12 @@
     - name: Add Score to path
       lineinfile: dest=/home/ubuntu/.bashrc line='export PATH=$PATH:/home/ubuntu/score-client-1.5.0/bin'
 
-    - name: Add .jtconfig
-      shell: |
-        echo "jt_account: "{{JT_USER}} >> /home/ubuntu/.jtconfig
-        echo "ams_server: "{{JT_SERVER}}"/api/jt-ams/v0.1" >> /home/ubuntu/.jtconfig
-        echo "wrs_server: "{{JT_SERVER}}"/api/jt-wrs/v0.1" >> /home/ubuntu/.jtconfig
-        echo "jess_server: {{JT_SERVER}}/api/jt-jess/v0.1" >> /home/ubuntu/.jtconfig
+    - name: Copy .jtconfig
+      copy:
+        src: "{{jtconfig}}"
+        dest: /home/ubuntu/.jtconfig
 
-    - name: Add access tokens
-      shell: |
-        echo "export ACCESSTOKEN="{{ACCESSTOKEN}} >> /home/ubuntu/.bashrc
-        echo "export ASCP_EGA_HOST="{{ASCP_EGA_HOST}} >> /home/ubuntu/.bashrc
-        echo "export ASCP_EGA_USER="{{ASCP_EGA_USER}} >> /home/ubuntu/.bashrc
-        echo "export ASPERA_SCP_PASS="{{ASPERA_SCP_PASS}} >> /home/ubuntu/.bashrc
-        echo "export EGA_DCK_KEY="{{EGA_DCK_KEY}} >> /home/ubuntu/.bashrc
-        echo "export STORAGEURL_COLLAB="{{STORAGEURL_COLLAB}} >> /home/ubuntu/.bashrc
-        echo "export METADATAURL_COLLAB="{{METADATAURL_COLLAB}} >> /home/ubuntu/.bashrc
-        echo "export STORAGEURL_AWS="{{STORAGEURL_AWS}} >> /home/ubuntu/.bashrc
-        echo "export METADATAURL_AWS="{{METADATAURL_AWS}} >> /home/ubuntu/.bashrc
-        echo "export SONG_SERVER_COLLAB="{{SONG_SERVER_COLLAB}} >> /home/ubuntu/.bashrc
-        echo "export SONG_SERVER_AWS="{{SONG_SERVER_AWS}} >> /home/ubuntu/.bashrc
-        echo "export AWS_ACCESS_KEY_ID="{{AWS_ACCESS_KEY_ID}} >> /home/ubuntu/.bashrc
-        echo "export AWS_SECRET_ACCESS_KEY="{{AWS_SECRET_ACCESS_KEY}} >> /home/ubuntu/.bashrc
-        echo "export COLLAB_ACCESS_KEY_ID="{{COLLAB_ACCESS_KEY_ID}} >> /home/ubuntu/.bashrc
-        echo "export COLLAB_SECRET_ACCESS_KEY="{{COLLAB_SECRET_ACCESS_KEY}} >> /home/ubuntu/.bashrc
+    - name: Copy .bashrc
+      copy:
+        src: "{{bashrc}}"
+        dest: /home/ubuntu/.bashrc
