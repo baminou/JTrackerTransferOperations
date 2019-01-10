@@ -30,10 +30,6 @@ class SyncFiles(YmlConfigOperation):
     def _run(self):
         etcd_jt = ETCDJTracker(self.config.get('jtracker_host'), self.config.get('jtracker_user'), self.config.get('jtracker_queue'))
 
-        for id in etcd_jt.get_job_ids():
-            etcd_jt.get_job(id)
-
-
         repo_path = self.config.get('git_repo')
 
         cpt = 0

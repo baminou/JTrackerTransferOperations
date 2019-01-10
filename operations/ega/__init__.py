@@ -15,6 +15,8 @@ from .new_fids import Newfids
 from .job_validate import Jobvalidate
 from .publish_state import Publishstate
 from .publish_states import Publishstates
+from .dump_workflow_jobs import Dumpworkflowjobs
+from .sync_user import Syncuser
 
 class EGA(Library):
 
@@ -40,11 +42,13 @@ class EGA(Library):
             'runnable': Runnable,
             'is_alive': Isalive,
             'sync': SyncFiles,
+            'sync:user' : Syncuser,
             'to_stage:status': Tostagestatus,
             'report': Report,
             'old:fids': Oldfids,
             'new:fids': Newfids,
             'job:validate': Jobvalidate,
             'publish:state': Publishstate,
-            'publish:states': Publishstates
+            'publish:states': Publishstates,
+            'dump_wf': Dumpworkflowjobs
         }
