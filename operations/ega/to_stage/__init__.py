@@ -1,12 +1,8 @@
 
-
-
 import logging
-
 import ega_transfer
 import csv
 from operation_types.yml_config_operation import YmlConfigOperation
-import argparse
 
 class ToStage(YmlConfigOperation):
 

@@ -17,6 +17,7 @@ from .publish_state import Publishstate
 from .publish_states import Publishstates
 from .dump_workflow_jobs import Dumpworkflowjobs
 from .sync_user import Syncuser
+from .to_stage_list import Tostagelist
 
 class EGA(Library):
 
@@ -38,6 +39,7 @@ class EGA(Library):
             'job': Job,
             'dbox': Dbox,
             'to_stage': ToStage,
+            'to_stage:list': Tostagelist,
             'to_delete': ToDelete,
             'runnable': Runnable,
             'is_alive': Isalive,
