@@ -1,1 +1,0 @@
-This library has not been documented yet.
