@@ -10,7 +10,7 @@ class Isalive(Operation):
 
     @staticmethod
     def description():
-        return "Isalive has not been documented yet."
+        return "Check if Aspera server is alive"
 
     def _parser(self, main_parser):
         main_parser.add_argument('aspera_host', help="URL of the aspera server")
