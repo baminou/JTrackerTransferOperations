@@ -123,6 +123,7 @@ class EGAAudit:
         return None
 
     def get_info_from_egafid(self, egafid, *args):
+        print(egafid)
         row = self.find_rows(egafid)[0]
         return [row[x] for x in args]
 

@@ -18,6 +18,8 @@ from .publish_states import Publishstates
 from .dump_workflow_jobs import Dumpworkflowjobs
 from .sync_user import Syncuser
 from .to_stage_list import Tostagelist
+from .check_github import Checkgithub
+from .restage import Restage
 
 class EGA(Library):
 
@@ -39,6 +41,7 @@ class EGA(Library):
             'job': Job,
             'dbox': Dbox,
             'to_stage': ToStage,
+            'restage': Restage,
             'to_stage:list': Tostagelist,
             'to_delete': ToDelete,
             'runnable': Runnable,
@@ -52,5 +55,6 @@ class EGA(Library):
             'job:validate': Jobvalidate,
             'publish:state': Publishstate,
             'publish:states': Publishstates,
-            'dump_wf': Dumpworkflowjobs
+            'dump_wf': Dumpworkflowjobs,
+            'check:github': Checkgithub
         }

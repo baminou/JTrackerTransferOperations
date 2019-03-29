@@ -5,6 +5,11 @@ import requests
 def url_exists(url):
     return not requests.get(url).status_code == 404
 
+def project_allowed_on_aws():
+    return { 'LIRI-JP', 'PACA-CA' , 'PRAD-CA', 'RECA-EU', 'PAEN-AU', 'PACA-AU',
+             'BOCA-UK','OV-AU', 'MELA-AU', 'BRCA-UK', 'PRAD-UK', 'CMDI-UK', 'LINC-JP',
+             'ORCA-IN', 'BTCA-SG', 'LAML-KR', 'LICA-FR', 'CLLE-ES', 'ESAD-UK', 'PAEN-IT'}
+
 def yes_or_no(question):
     while 1:
         res = input("%s (Enter y/n)" % (question)).lower()
