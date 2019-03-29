@@ -19,6 +19,7 @@ from .dump_workflow_jobs import Dumpworkflowjobs
 from .sync_user import Syncuser
 from .to_stage_list import Tostagelist
 from .check_github import Checkgithub
+from .restage import Restage
 
 class EGA(Library):
 
@@ -40,6 +41,7 @@ class EGA(Library):
             'job': Job,
             'dbox': Dbox,
             'to_stage': ToStage,
+            'restage': Restage,
             'to_stage:list': Tostagelist,
             'to_delete': ToDelete,
             'runnable': Runnable,

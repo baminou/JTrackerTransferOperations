@@ -106,7 +106,7 @@ def get_files_to_stage(egafids, tsv_file, entityType):
                                                        "ICGC Submitted Sample ID","EGA Sample Accession","EGA Analysis Accession",
                                                        "EGA Raw Sequence Filename","EGA File Accession","MD5 Checksum",
                                                        "Unencrypted Checksum","EGA Dataset Accession","File Size")
-        
+
         result.append(OrderedDict(zip(keys,values)))
         logging.debug(values)
     logging.info("To stage informations retrieved")
